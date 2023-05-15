@@ -1,0 +1,9 @@
+{% extends 'add_patients.html' %}
+{% block content %}
+    <h3>Dodaj pacjenta:</h3>
+    <form action="{% url 'add-patients' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit">
+    </form>
+{% endblock %}
