@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h3>Dodaj pacjenta:</h3>
-    <form action="{% url 'add-patients' %}" method="POST">
+    <h3>Dodaj lekarza:</h3>
+    <form action="{% url 'add-doctors' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit">
