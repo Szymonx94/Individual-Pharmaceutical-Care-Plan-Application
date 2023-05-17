@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import PatientsForm, DoctorsForm, MedicamentForm
-from .models import Patients, Doctors, Medicament
+from .models import Patients, Doctors, Medicament, MedicalComponent
 from django.contrib import messages
 
 # Create your views here.
@@ -51,6 +51,19 @@ class AddMedicamentView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('base')
     form_class = MedicamentForm
     success_message = 'Dodano lek!'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, self.success_message)
+        return response
+
+
+class AddMedicalComponentView(SuccessMessageMixin, CreateView):
+    """Added to the medicalcomponent database"""
+    model = MedicalComponent
+    success_url = reverse_lazy('base')
+    form_class = MedicamentForm
+    success_message = 'Dodano wyrób medyczny!'
 
     def form_valid(self, form):
         response = super().form_valid(form)

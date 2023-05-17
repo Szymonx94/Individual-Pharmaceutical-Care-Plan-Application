@@ -36,3 +36,14 @@ class MedicamentForm(forms.ModelForm):
     class Meta:
         model = Medicament
         fields = ['name', 'descriptions']
+
+
+class MedicalComponentForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(MedicalComponentForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['placeholder'] = 'Podaj nazwę'
+        self.fields['descriptions'].widget.attrs['placeholder'] = 'Krótki opis obsługi'
+
+    class Meta:
+        model = Medicament
+        fields = ['name', 'descriptions']
