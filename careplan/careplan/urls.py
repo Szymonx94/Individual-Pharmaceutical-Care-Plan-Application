@@ -17,11 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from patients_app.views import FirstSiteView, AddPatientsView, AddDoctorsView
+from patients_app.views import FirstSiteView, AddPatientsView, AddDoctorsView, AddMedicamentView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', FirstSiteView.as_view(), name="base"),
     path("add_patients/", AddPatientsView.as_view(), name="add-patients"),
     path("add_doctors/", AddDoctorsView.as_view(), name="add-doctors"),
+    path("add_medicament/", AddMedicamentView.as_view(), name="add-medicament"),
 ]

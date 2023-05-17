@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h3>Dodaj pacjenta:</h3>
+<h3 xmlns="http://www.w3.org/1999/html">Dodaj pacjenta:</h3>
     <form action="{% url 'add-patients' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit">
+    <input type="Submit">
     </form>
 {% endblock %}
