@@ -8,6 +8,7 @@ from .forms import PatientsForm, DoctorsForm, MedicamentForm
 from .models import Patients, Doctors, Medicament, MedicalComponent
 from django.contrib import messages
 
+
 # Create your views here.
 
 
@@ -15,8 +16,10 @@ class FirstSiteView(View):
     """
     View first site
     """
+
     def get(self, request):
-        return TemplateResponse(request, 'base.html')
+        return TemplateResponse(request, 'first_page.html')
+
 
 class AddPatientsView(CreateView):
     """Added to the patient database"""
@@ -28,6 +31,24 @@ class AddPatientsView(CreateView):
     def get_success_message(self, cleaned_data):
         return f"Dodano pacjenta {cleaned_data}"
 
+class PatientsListView(ListView):
+    """List of all patients"""
+    model = Patients
+    template_name = 'patients_list.html'  # Nazwa szablonu HTML
+    context_object_name = 'patients'  # Nazwa obiektu w kontekście szablonu
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            # Przeszukiwanie pacjentów po nazwisku
+            return Patients.objects.filter(pesel__icontains=query)
+        else:
+            return Patients.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
 
 class AddDoctorsView(SuccessMessageMixin, CreateView):
     """Added to the patient database"""

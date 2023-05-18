@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h3>Dodaj lek:</h3>
+    <h3>Dodaj wyrób medyczny:</h3>
     <form action="{% url 'add-medicalcomponent' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}

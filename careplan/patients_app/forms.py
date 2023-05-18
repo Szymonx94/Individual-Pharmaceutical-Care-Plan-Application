@@ -1,4 +1,4 @@
-from .models import Patients, Doctors, Medicament
+from .models import Patients, Doctors, Medicament, MedicalComponent
 from django.forms import ModelForm
 from django import forms
 
@@ -11,11 +11,24 @@ class PatientsForm(forms.ModelForm):
 
     class Meta:
         model = Patients
-        fields = ['first_name', 'last_name', 'year_of_birth', 'age', 'pesel', 'address', 'gender', 'weight',
-                  'growth', 'description_of_diseases', 'drugs_list']
+        fields = '__all__'
+        labels = {
+            'first_name': 'Imię',
+            'last_name': 'Nazwisko',
+            'year_of_birth': 'Data urodzenia',
+            'age': 'Wiek',
+            'pesel': 'PESEL',
+            'address': 'Adres zamieszkania',
+            'gender': 'Płeć',
+            'weight': 'Waga',
+            'growth': 'Wzrost',
+            'description_of_diseases': 'Opis chorób',
+            'drugs_list': 'Lista leków'
+        }
 
 
 class DoctorsForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
         super(DoctorsForm, self).__init__(*args, **kwargs)
         self.fields['first_name'].widget.attrs['placeholder'] = 'Podaj Imię'
@@ -25,6 +38,11 @@ class DoctorsForm(forms.ModelForm):
     class Meta:
         model = Doctors
         fields = ['first_name', 'last_name', 'specialization']
+        labels = {
+            'first_name': 'Imię',
+            'last_name': 'Nazwisko',
+            'specialization': 'Specjalizacja'
+        }
 
 
 class MedicamentForm(forms.ModelForm):
@@ -36,6 +54,10 @@ class MedicamentForm(forms.ModelForm):
     class Meta:
         model = Medicament
         fields = ['name', 'descriptions']
+        labels = {
+            'name': 'Nazwa',
+            'descriptions': 'Opis leku'
+        }
 
 
 class MedicalComponentForm(forms.ModelForm):
@@ -45,5 +67,9 @@ class MedicalComponentForm(forms.ModelForm):
         self.fields['descriptions'].widget.attrs['placeholder'] = 'Krótki opis obsługi'
 
     class Meta:
-        model = Medicament
-        fields = ['name', 'descriptions']
+        model = MedicalComponent
+        fields = ['name', 'description']
+        labels = {
+            'name': 'Nazwa',
+            'description': 'Opis'
+        }
