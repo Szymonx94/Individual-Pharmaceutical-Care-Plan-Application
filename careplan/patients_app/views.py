@@ -34,7 +34,7 @@ class AddPatientsView(CreateView):
 class PatientsListView(ListView):
     """List of all patients"""
     model = Patients
-    template_name = 'patients_list.html'  # Nazwa szablonu HTML
+    template_name = 'patients_list.html'  # Name template HTML
     context_object_name = 'patients'  # Nazwa obiektu w kontekście szablonu
 
     def get_queryset(self):
@@ -62,8 +62,25 @@ class AddDoctorsView(SuccessMessageMixin, CreateView):
         messages.success(self.request, self.success_message)
         return response
 
-    # def get_success_message(self, cleaned_data):
-    #     return f"Dodano lekarza {cleaned_data}"
+
+class DoctorsListView(ListView):
+    """List of all doctors"""
+    model = Doctors
+    template_name = 'doctors_list.html'  # Name template HTML
+    context_object_name = 'doctors'  # Nazwa obiektu w kontekście szablonu
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            # Przeszukiwanie doctora po nazwisku
+            return Doctors.objects.filter(last_name__icontains=query)
+        else:
+            return Doctors.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
 
 
 class AddMedicamentView(SuccessMessageMixin, CreateView):
