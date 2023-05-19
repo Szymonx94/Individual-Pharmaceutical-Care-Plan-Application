@@ -150,6 +150,7 @@ class MedicalcomponentListView(ListView):
         context['search_query'] = self.request.GET.get('search', '')
         return context
 
+
 class PatientsPrintOutListView(ListView):
     """ Views for patient printout"""
     model = Patients
