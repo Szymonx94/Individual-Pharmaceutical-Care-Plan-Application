@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path
 
 from patients_app.views import FirstSiteView, AddPatientsView, AddDoctorsView, AddMedicamentView, \
-    AddMedicalComponentView, PatientsListView, DoctorsListView, MedicamentListView
+    AddMedicalComponentView, PatientsListView, DoctorsListView, MedicamentListView, MedicalcomponentListView, \
+    PatientsPrintOutListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,4 +31,6 @@ urlpatterns = [
     path("add_medicament/", AddMedicamentView.as_view(), name="add-medicament"),
     path("medicament_list/", MedicamentListView.as_view(), name="medicament-list"),
     path("add_medicalcomponent/", AddMedicalComponentView.as_view(), name="add-medicalcomponent"),
+    path("medicalcomponent_list/", MedicalcomponentListView.as_view(), name="medicalcomponent-list"),
+    path("patient_printout/", PatientsPrintOutListView.as_view(), name="patient-printout"),
 ]

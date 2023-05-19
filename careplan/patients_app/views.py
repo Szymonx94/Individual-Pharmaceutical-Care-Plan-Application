@@ -129,3 +129,42 @@ class AddMedicalComponentView(SuccessMessageMixin, CreateView):
         response = super().form_valid(form)
         messages.success(self.request, self.success_message)
         return response
+
+
+class MedicalcomponentListView(ListView):
+    """List of all medicament"""
+    model = MedicalComponent
+    template_name = 'medicalcomponent_list.html'  # Name template HTML
+    context_object_name = 'medicalcomponent'  # Nazwa obiektu w kontekście szablonu
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            # Przeszukiwanie doctora po nazwisku
+            return MedicalComponent.objects.filter(name__icontains=query)
+        else:
+            return MedicalComponent.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
+
+class PatientsPrintOutListView(ListView):
+    """ Views for patient printout"""
+    model = Patients
+    template_name = 'patient_printout.html'  # Name template HTML
+    context_object_name = 'patient'  # Nazwa obiektu w kontekście szablonu
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            # Przeszukiwanie pacjentów po nazwisku
+            return Patients.objects.filter(pesel__icontains=query)
+        else:
+            return Patients.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
