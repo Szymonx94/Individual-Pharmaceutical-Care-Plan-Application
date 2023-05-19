@@ -4,7 +4,7 @@ from django.views import View
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 from django.contrib.messages.views import SuccessMessageMixin
-from .forms import PatientsForm, DoctorsForm, MedicamentForm
+from .forms import PatientsForm, DoctorsForm, MedicamentForm, MedicalComponentForm
 from .models import Patients, Doctors, Medicament, MedicalComponent
 from django.contrib import messages
 
@@ -31,6 +31,7 @@ class AddPatientsView(CreateView):
     def get_success_message(self, cleaned_data):
         return f"Dodano pacjenta {cleaned_data}"
 
+
 class PatientsListView(ListView):
     """List of all patients"""
     model = Patients
@@ -50,10 +51,11 @@ class PatientsListView(ListView):
         context['search_query'] = self.request.GET.get('search', '')
         return context
 
+
 class AddDoctorsView(SuccessMessageMixin, CreateView):
     """Added to the patient database"""
     model = Doctors
-    success_url = reverse_lazy('base')
+    success_url = reverse_lazy('first-page')
     form_class = DoctorsForm
     success_message = 'Dodano lekarza!'
 
@@ -86,7 +88,7 @@ class DoctorsListView(ListView):
 class AddMedicamentView(SuccessMessageMixin, CreateView):
     """Added to the medicament database"""
     model = Medicament
-    success_url = reverse_lazy('base')
+    success_url = reverse_lazy('first-page')
     form_class = MedicamentForm
     success_message = 'Dodano lek!'
 
@@ -96,11 +98,31 @@ class AddMedicamentView(SuccessMessageMixin, CreateView):
         return response
 
 
+class MedicamentListView(ListView):
+    """List of all medicament"""
+    model = Medicament
+    template_name = 'medicament_list.html'  # Name template HTML
+    context_object_name = 'medicament'  # Nazwa obiektu w kontekście szablonu
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            # Przeszukiwanie doctora po nazwisku
+            return Medicament.objects.filter(name__icontains=query)
+        else:
+            return Medicament.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
+
+
 class AddMedicalComponentView(SuccessMessageMixin, CreateView):
     """Added to the medicalcomponent database"""
     model = MedicalComponent
-    success_url = reverse_lazy('base')
-    form_class = MedicamentForm
+    success_url = reverse_lazy('first-page')
+    form_class = MedicalComponentForm
     success_message = 'Dodano wyrób medyczny!'
 
     def form_valid(self, form):

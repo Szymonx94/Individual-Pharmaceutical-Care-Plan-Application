@@ -1,37 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>Lista lekarzy:</h2>
-    <br><br>
+<h2>Lista lekarzy:</h2>
+<br><br>
 
-    <form method="GET" action="{% url 'doctors-list' %}">
-        <input type="text" name="search" value="{{ search_query }}" placeholder="Wyszukaj po nazwisku">
-        <button type="submit">Szukaj</button>
-    </form>
-    <br><br>
+<form method="GET" action="{% url 'doctors-list' %}">
+    <input type="text" name="search" value="{{ search_query }}" placeholder="Wyszukaj po nazwisku">
+    <button type="submit">Szukaj</button>
+</form>
+<br><br>
 
-    <table class="table">
-        <thead>
-            <tr>
-
-                <th>Imię</th>
-                <th>Nazwisko</th>
-                <th>Specjalizacja</th>
-
-            </tr>
-        </thead>
-        <tbody>
-            {% for doctors in object_list %}
-            <tr>
-
-                <td>{{ doctors.first_name }}</td>
-                <td>{{ doctors.last_name }}</td>
-                <td>{{ doctors.specialization }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">Brak lekarza</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Specjalizacja</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for doctors in object_list %}
+    <tr>
+        <td>{{ doctors.first_name }}</td>
+        <td>{{ doctors.last_name }}</td>
+        <td>{{ doctors.specialization }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">Brak lekarza</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

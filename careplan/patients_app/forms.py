@@ -11,11 +11,13 @@ class PatientsForm(forms.ModelForm):
 
     class Meta:
         model = Patients
-        fields = '__all__'
+        fields = ['first_name', 'last_name', 'year_of_birth', 'age', 'pesel',
+                  'address', 'gender', 'weight', 'growth', 'description_of_diseases', 'drugs_list'
+                  ]
         labels = {
             'first_name': 'Imię',
             'last_name': 'Nazwisko',
-            'year_of_birth': 'Data urodzenia',
+            'year_of_birth': 'Rok urodzenia',
             'age': 'Wiek',
             'pesel': 'PESEL',
             'address': 'Adres zamieszkania',
@@ -64,12 +66,12 @@ class MedicalComponentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(MedicalComponentForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['placeholder'] = 'Podaj nazwę'
-        self.fields['description'].widget.attrs['placeholder'] = 'Krótki opis obsługi'
+        self.fields['description'].widget.attrs['placeholder'] = 'Opis'
 
     class Meta:
         model = MedicalComponent
         fields = ['name', 'description']
         labels = {
             'name': 'Nazwa',
-            'description': 'Opis'
+            'description': 'Opis wyrobu'
         }

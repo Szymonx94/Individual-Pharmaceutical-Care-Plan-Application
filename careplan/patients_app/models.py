@@ -40,6 +40,7 @@ class Doctors(models.Model):
     """
     Data of doctors with a description of specialization
     """
+
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     specialization = models.CharField(max_length=100)

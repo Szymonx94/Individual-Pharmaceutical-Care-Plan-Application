@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Lista leków:</h2>
+<br><br>
+
+<form method="GET" action="{% url 'medicament-list' %}">
+    <input type="text" name="search" value="{{ search_query }}" placeholder="Wyszukaj po nazwie">
+    <button type="submit">Szukaj</button>
+</form>
+<br><br>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Nazwa</th>
+        <th>Zastosowanie</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for medicament in object_list %}
+    <tr>
+        <td>{{ medicament.name }}</td>
+        <td>{{ medicament.descriptions }}</td>
+
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">Brak leku</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
