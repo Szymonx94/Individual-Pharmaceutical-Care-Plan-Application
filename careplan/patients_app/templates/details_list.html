@@ -33,8 +33,23 @@
     </tbody>
 </table>
 
-<li>{{ description_of_diseases }}</li>
-<li>{{ drugs_list }}</li>
+<h3>Opis chorób:</h3>
+<ul>
+    {% for description in description_of_diseases %}
+    <li>{{ description }}</li>
+    {% empty %}
+    <li>Brak opisu chorób</li>
+    {% endfor %}
+</ul>
+
+<h3>Lista leków:</h3>
+<ul>
+    {% for drug in drugs_list %}
+    <li>{{ drug }}</li>
+    {% empty %}
+    <li>Brak danych o lekach</li>
+    {% endfor %}
+</ul>
 
  <a href="{% url 'patient-details' patient.id %}?format=pdf" class="btn btn-primary">Generuj PDF</a>
 {% endblock %}

@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from django.views import View
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from django.contrib.messages.views import SuccessMessageMixin
-from .forms import PatientsForm, DoctorsForm, MedicamentForm, MedicalComponentForm
+from .forms import PatientsForm, DoctorsForm, MedicamentForm, MedicalComponentForm, RegistrationForm
 from .models import Patients, Doctors, Medicament, MedicalComponent
 from django.contrib import messages
 
@@ -68,6 +70,8 @@ class PatientsDeleteView(DeleteView):
     model = Patients
     template_name = 'patients_delete.html'
     success_url = reverse_lazy('patients-list')
+
+
 
 
 class AddDoctorsView(SuccessMessageMixin, CreateView):
@@ -196,3 +200,43 @@ class PatientsDetailsListView(DetailView):
     context_object_name = 'patient'
     slug_field = 'id'
     slug_url_kwarg = 'id'
+
+
+class RegistrationView(View):
+    def get(self, request):
+        form = RegistrationForm()
+        return render(request, 'registration.html', {'form': form})
+
+    def post(self, request):
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('first-page')
+        return render(request, 'registration.html', {'form': form})
+
+
+class LoginView(View):
+    """ Login Users"""
+
+    def get(self, request):
+        return render(request, 'login.html')
+
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('first-page')
+        else:
+            messages.error(request, 'Niepoprawna nazwa użytkownika lub hasło.')
+            return redirect('login')
+
+
+class LogoutView(LoginRequiredMixin, View):
+    """ Logout Users"""
+
+    def get(self, request):
+        logout(request)
+        return redirect('login')
