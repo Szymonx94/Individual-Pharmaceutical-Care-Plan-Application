@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Szczegóły:</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Rok urodzenia</th>
+        <th>Wiek</th>
+        <th>Płeć</th>
+        <th>Wzrost</th>
+        <th>Waga</th>
+        <th>Adres zamieszkania</th>
+        <th>PESEL</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ patient.first_name }}</td>
+        <td>{{ patient.last_name }}</td>
+        <td>{{ patient.year_of_birth }}</td>
+        <td>{{ patient.age }} </td>
+        <td>{{ patient.gender }} </td>
+        <td>{{ patient.growth }} </td>
+        <td>{{ patient.weight }} </td>
+        <td>{{ patient.address }} </td>
+        <td>{{ patient.pesel }} </td>
+
+    </tr>
+
+    </tbody>
+</table>
+
+<li>{{ description_of_diseases }}</li>
+<li>{{ drugs_list }}</li>
+
+{% endblock %}

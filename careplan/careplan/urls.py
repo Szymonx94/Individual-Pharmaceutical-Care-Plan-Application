@@ -19,7 +19,7 @@ from django.urls import path
 
 from patients_app.views import FirstSiteView, AddPatientsView, AddDoctorsView, AddMedicamentView, \
     AddMedicalComponentView, PatientsListView, DoctorsListView, MedicamentListView, MedicalcomponentListView, \
-    PatientsPrintOutListView, PatientsUpdateView, PatientsDeleteView
+    PatientsPrintOutListView, PatientsUpdateView, PatientsDeleteView, PatientsDetailsListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,4 +35,5 @@ urlpatterns = [
     path("add_medicalcomponent/", AddMedicalComponentView.as_view(), name="add-medicalcomponent"),
     path("medicalcomponent_list/", MedicalcomponentListView.as_view(), name="medicalcomponent-list"),
     path("patient_printout/", PatientsPrintOutListView.as_view(), name="patient-printout"),
+    path("patient_details/<int:pk>/", PatientsDetailsListView.as_view(), name="patient-details"),
 ]

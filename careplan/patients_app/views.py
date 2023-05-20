@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.views import View
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import PatientsForm, DoctorsForm, MedicamentForm, MedicalComponentForm
 from .models import Patients, Doctors, Medicament, MedicalComponent
@@ -187,3 +187,12 @@ class PatientsPrintOutListView(ListView):
         context = super().get_context_data(**kwargs)
         context['search_query'] = self.request.GET.get('search', '')
         return context
+
+
+class PatientsDetailsListView(DetailView):
+    """Details one patient"""
+    model = Patients
+    template_name = 'details_list.html'
+    context_object_name = 'patient'
+    slug_field = 'id'
+    slug_url_kwarg = 'id'

@@ -22,13 +22,11 @@
     <tbody>
     {% for patient in object_list %}
     <tr>
-        <td>{{ patient.id }}</td>
+        <td><a href="/patient_details/{{ patient.id }}/">{{ patient.id }}</a></td>
         <td>{{ patient.first_name }}</td>
         <td>{{ patient.last_name }}</td>
         <td>{{ patient.address }}</td>
-        <td>
-            <a href="/patients_list/{{ patient.pesel }}/">{{ patient.pesel }}</a>
-        </td>
+        <td>{{ patient.pesel }} </td>
         <td>
             <a href="/patients/edit/{{ patient.id }}/">Edytuj</a> |
             <a href="/patients/delete/{{ patient.id }}/">Usuń</a>
