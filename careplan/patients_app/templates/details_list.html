@@ -36,4 +36,5 @@
 <li>{{ description_of_diseases }}</li>
 <li>{{ drugs_list }}</li>
 
+ <a href="{% url 'patient-details' patient.id %}?format=pdf" class="btn btn-primary">Generuj PDF</a>
 {% endblock %}

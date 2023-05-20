@@ -173,7 +173,7 @@ class PatientsPrintOutListView(ListView):
     """ Views for patient printout"""
     model = Patients
     template_name = 'patient_printout.html'  # Name template HTML
-    context_object_name = 'patient'  # Nazwa obiektu w kontekście szablonu
+    context_object_name = 'patients'  # Nazwa obiektu w kontekście szablonu
 
     def get_queryset(self):
         query = self.request.GET.get('search')

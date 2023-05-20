@@ -16,19 +16,17 @@
         <th>Nazwisko</th>
         <th>Adres zamieszkania</th>
         <th>PESEL</th>
-        <th>PESEL2</th>
+
     </tr>
     </thead>
     <tbody>
-    {% for patient in object_list %}
+    {% for patients in object_list %}
     <tr>
-        <td>{{ patient.id }}</td>
-        <td>{{ patient.first_name }}</td>
-        <td>{{ patient.last_name }}</td>
-        <td>{{ patient.address }}</td>
-
-        <li>{{ patient.description_of_diseases}}</li>
-        <li>{{ patient.drugs_list}}</li>
+        <td><a href="/patient_details/{{ patient.id }}/">{{ patients.id }}</a></td>
+        <td>{{ patients.first_name }}</td>
+        <td>{{ patients.last_name }}</td>
+        <td>{{ patients.address }}</td>
+        <td>{{ patients.pesel }}</td>
     </tr>
 
     {% empty %}

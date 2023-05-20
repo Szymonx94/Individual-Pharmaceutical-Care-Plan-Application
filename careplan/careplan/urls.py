@@ -34,6 +34,6 @@ urlpatterns = [
     path("medicament_list/", MedicamentListView.as_view(), name="medicament-list"),
     path("add_medicalcomponent/", AddMedicalComponentView.as_view(), name="add-medicalcomponent"),
     path("medicalcomponent_list/", MedicalcomponentListView.as_view(), name="medicalcomponent-list"),
-    path("patient_printout/", PatientsPrintOutListView.as_view(), name="patient-printout"),
+    path("patients/printout/", PatientsPrintOutListView.as_view(), name="patient-printout"),
     path("patient_details/<int:pk>/", PatientsDetailsListView.as_view(), name="patient-details"),
 ]
