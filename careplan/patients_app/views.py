@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.views import View
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import PatientsForm, DoctorsForm, MedicamentForm, MedicalComponentForm
 from .models import Patients, Doctors, Medicament, MedicalComponent
@@ -17,7 +17,8 @@ class FirstSiteView(View):
     View first site
     """
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         return TemplateResponse(request, 'first_page.html')
 
 
@@ -35,8 +36,10 @@ class AddPatientsView(CreateView):
 class PatientsListView(ListView):
     """List of all patients"""
     model = Patients
-    template_name = 'patients_list.html'  # Name template HTML
-    context_object_name = 'patients'  # Nazwa obiektu w kontekście szablonu
+    template_name = 'patients_list.html'
+    ordering = 'id'
+    context_object_name = 'patients'
+
 
     def get_queryset(self):
         query = self.request.GET.get('search')
@@ -50,6 +53,21 @@ class PatientsListView(ListView):
         context = super().get_context_data(**kwargs)
         context['search_query'] = self.request.GET.get('search', '')
         return context
+
+
+class PatientsUpdateView(UpdateView):
+    """Class to edit the patient"""
+    model = Patients
+    form_class = PatientsForm
+    template_name = 'patients_update.html'
+    success_url = '/patients_list/'
+
+
+class PatientsDeleteView(DeleteView):
+    """ Delete patients"""
+    model = Patients
+    template_name = 'patients_delete.html'
+    success_url = reverse_lazy('patients-list')
 
 
 class AddDoctorsView(SuccessMessageMixin, CreateView):
