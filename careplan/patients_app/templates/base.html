@@ -1,5 +1,5 @@
 {% load static %}
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -74,7 +74,8 @@
 
                     <li><a href="{% url 'logout' %}">Wyloguj</a></li>
                     {% else %}
-                    <li><a href="{% url 'login' %}">Zaloguj</a></li>
+                    <li><a href="{% url 'login' %}">Zaloguj</a></li> |
+
                     <li><a href="{% url 'register' %}">Zarejestruj</a></li>
                     {% endif %}
                 </ul>

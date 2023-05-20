@@ -53,6 +53,7 @@ class DoctorsForm(forms.ModelForm):
 
 
 class MedicamentForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
         super(MedicamentForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():

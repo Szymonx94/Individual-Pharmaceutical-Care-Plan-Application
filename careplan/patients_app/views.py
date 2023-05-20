@@ -24,7 +24,7 @@ class FirstSiteView(View):
         return TemplateResponse(request, 'first_page.html')
 
 
-class AddPatientsView(CreateView):
+class AddPatientsView(SuccessMessageMixin, CreateView):
     """Added to the patient database"""
     model = Patients
     success_url = reverse_lazy('add-patients')
@@ -47,9 +47,9 @@ class PatientsListView(ListView):
         query = self.request.GET.get('search')
         if query:
             # Przeszukiwanie pacjentów po nazwisku
-            return Patients.objects.filter(pesel__icontains=query)
+            return Patients.objects.filter(pesel__icontains=query).order_by('id')
         else:
-            return Patients.objects.all()
+            return Patients.objects.all().order_by('id')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -77,7 +77,7 @@ class PatientsDeleteView(DeleteView):
 class AddDoctorsView(SuccessMessageMixin, CreateView):
     """Added to the patient database"""
     model = Doctors
-    success_url = reverse_lazy('first-page')
+    success_url = reverse_lazy('add-doctors')
     form_class = DoctorsForm
     success_message = 'Dodano lekarza!'
 
