@@ -4,7 +4,7 @@
     <form action="{% url 'add-patients' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-        {{ success_message }}
+
     <input type="Submit">
     </form>
 {% endblock %}

@@ -21,12 +21,12 @@
         <td>{{ patient.first_name }}</td>
         <td>{{ patient.last_name }}</td>
         <td>{{ patient.year_of_birth }}</td>
-        <td>{{ patient.age }} </td>
-        <td>{{ patient.gender }} </td>
-        <td>{{ patient.growth }} </td>
-        <td>{{ patient.weight }} </td>
-        <td>{{ patient.address }} </td>
-        <td>{{ patient.pesel }} </td>
+        <td>{{ patient.age }}</td>
+        <td>{{ patient.gender }}</td>
+        <td>{{ patient.growth }}</td>
+        <td>{{ patient.weight }}</td>
+        <td>{{ patient.address }}</td>
+        <td>{{ patient.pesel }}</td>
 
     </tr>
 
@@ -36,20 +36,18 @@
 <h3>Opis chorób:</h3>
 <ul>
     {{object.description_of_diseases}}
-    <li>{{ description }}</li>
-
-
+    {{ description }}
 
 </ul>
 
 <h3>Lista leków:</h3>
 <ul>
     {{object.drugs_list }}
-    <li>{{ drug }}</li>
-
-
+    {{ drug }}
 
 </ul>
 
- <a href="{% url 'patient-details' patient.id %}?format=pdf" class="btn btn-primary">Generuj PDF</a>
+<h3>Daty wizyt:</h3>
+
+<a href="{% url 'patient-details' patient.id %}?format=pdf" class="btn btn-primary">Dodaj nowe leki</a>
 {% endblock %}

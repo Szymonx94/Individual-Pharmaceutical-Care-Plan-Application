@@ -27,12 +27,16 @@ class FirstSiteView(View):
 class AddPatientsView(SuccessMessageMixin, CreateView):
     """Added to the patient database"""
     model = Patients
-    success_url = reverse_lazy('add-patients')
+    success_url = reverse_lazy('first-page')
     form_class = PatientsForm
     success_message = 'Dodano pacjenta!'
 
-    def get_success_message(self, cleaned_data):
-        return f"Dodano pacjenta {cleaned_data}"
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.success_message = f"Dodano pacjenta do bazy"
+        self.success_url = self.get_success_url() + '?success=true'
+        messages.success(self.request, self.success_message)
+        return response
 
 
 class PatientsListView(ListView):
@@ -41,7 +45,6 @@ class PatientsListView(ListView):
     template_name = 'patients_list.html'
     ordering = 'id'
     context_object_name = 'patients'
-
 
     def get_queryset(self):
         query = self.request.GET.get('search')
@@ -72,17 +75,17 @@ class PatientsDeleteView(DeleteView):
     success_url = reverse_lazy('patients-list')
 
 
-
-
-class AddDoctorsView(SuccessMessageMixin, CreateView):
+class AddDoctorsView(CreateView):
     """Added to the patient database"""
     model = Doctors
-    success_url = reverse_lazy('add-doctors')
+    success_url = reverse_lazy('first-page')
     form_class = DoctorsForm
-    success_message = 'Dodano lekarza!'
+
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        self.success_message = f"Dodano lekarza do bazy"
+        self.success_url = self.get_success_url() + '?success=true'
         messages.success(self.request, self.success_message)
         return response
 
@@ -112,10 +115,11 @@ class AddMedicamentView(SuccessMessageMixin, CreateView):
     model = Medicament
     success_url = reverse_lazy('first-page')
     form_class = MedicamentForm
-    success_message = 'Dodano lek!'
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        self.success_message = f"Dodano lek do bazy"
+        self.success_url = self.get_success_url() + '?success=true'
         messages.success(self.request, self.success_message)
         return response
 
@@ -149,6 +153,8 @@ class AddMedicalComponentView(SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        self.success_message = f"Dodano wyrób medyczny do bazy"
+        self.success_url = self.get_success_url() + '?success=true'
         messages.success(self.request, self.success_message)
         return response
 
@@ -183,9 +189,9 @@ class PatientsPrintOutListView(ListView):
         query = self.request.GET.get('search')
         if query:
             # Przeszukiwanie pacjentów po nazwisku
-            return Patients.objects.filter(pesel__icontains=query)
+            return Patients.objects.filter(pesel__icontains=query).order_by('id')
         else:
-            return Patients.objects.all()
+            return Patients.objects.all().order_by('id')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

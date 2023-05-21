@@ -89,7 +89,14 @@ class MedicalComponentForm(forms.ModelForm):
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField()
-
+    def __init__(self, *args, **kwargs):
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['username'].widget.attrs['placeholder'] = 'Podaj login'
+        self.fields['email'].widget.attrs['placeholder'] = 'Podaj email'
+        self.fields['password1'].widget.attrs['placeholder'] = 'Podaj hasło'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Powtórz hasło'
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
