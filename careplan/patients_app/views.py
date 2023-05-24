@@ -1,13 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from django.views import View
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import PatientsForm, DoctorsForm, MedicamentForm, MedicalComponentForm, RegistrationForm
-from .models import Patients, Doctors, Medicament, MedicalComponent
+from .models import Patients, Doctors, Medicament, MedicalComponent, Slider
 from django.contrib import messages
 
 
@@ -21,7 +21,11 @@ class FirstSiteView(View):
 
     @staticmethod
     def get(request):
-        return TemplateResponse(request, 'first_page.html')
+        sliderdata = Slider.objects.all()
+        context = {
+            'slider': sliderdata
+        }
+        return TemplateResponse(request, 'first_page.html',context)
 
 
 class AddPatientsView(SuccessMessageMixin, CreateView):
@@ -80,7 +84,6 @@ class AddDoctorsView(CreateView):
     model = Doctors
     success_url = reverse_lazy('first-page')
     form_class = DoctorsForm
-
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -179,10 +182,30 @@ class MedicalcomponentListView(ListView):
         return context
 
 
-class PatientsPrintOutListView(ListView):
+class DoctorPrintOutListView(ListView):
+    """ Views for doctor printout"""
+    model = Patients
+    template_name = 'doctor_printout.html'  # Name template HTML
+    context_object_name = 'patients'  # Nazwa obiektu w kontekście szablonu
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            # Przeszukiwanie pacjentów po nazwisku
+            return Patients.objects.filter(pesel__icontains=query).order_by('id')
+        else:
+            return Patients.objects.all().order_by('id')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
+
+
+class PatientPrintOutListView(ListView):
     """ Views for patient printout"""
     model = Patients
-    template_name = 'patient_printout.html'  # Name template HTML
+    template_name = 'doctor_printout.html'  # Name template HTML
     context_object_name = 'patients'  # Nazwa obiektu w kontekście szablonu
 
     def get_queryset(self):
@@ -206,6 +229,7 @@ class PatientsDetailsListView(DetailView):
     context_object_name = 'patient'
     slug_field = 'id'
     slug_url_kwarg = 'id'
+
 
 
 class RegistrationView(View):
@@ -246,3 +270,5 @@ class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
         return redirect('login')
+
+

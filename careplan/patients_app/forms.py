@@ -61,6 +61,7 @@ class MedicamentForm(forms.ModelForm):
         self.fields['name'].widget.attrs['placeholder'] = 'Podaj nazwę'
         self.fields['descriptions'].widget.attrs['placeholder'] = 'Podaj zastosowanie'
 
+
     class Meta:
         model = Medicament
         fields = ['name', 'descriptions']

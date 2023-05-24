@@ -30,7 +30,7 @@ class Patients(models.Model):
     growth = models.IntegerField(null=True)
     description_of_diseases = models.TextField()
     drugs_list = models.TextField()
-    medicament = models.ManyToManyField(Medicament)
+    medicament = models.ManyToManyField(Medicament, related_name='patients')
 
     def __str__(self):
         return self.first_name, self.last_name
@@ -61,3 +61,12 @@ class DateAdd(models.Model):
     """
     data_add = models.DateTimeField(null=True)
     patients = models.ForeignKey(Patients, on_delete=models.PROTECT, null=True)
+
+
+class Slider(models.Model):
+    title = models.CharField(max_length=100, blank=False)
+    description = models.TextField(max_length=800, blank=False)
+    image = models.ImageField(upload_to='static/', blank=False)
+
+    def __str__(self):
+        return self.title
