@@ -40,16 +40,28 @@
 
 </ul>
 
-<h3>Lista leków:</h3>
+<h3>Lista aktualnie przyjmowanych leków:</h3>
 <ul>
     {{object.drugs_list }}
     {{ drug }}
 
 </ul>
 
+   <h2>Nowa lista leków</h2>
+    <ul>
+        {% for medication in object.medicament.all %}
+            <li>{{ medication.name }} --> {{ medication.descriptions }}</li>
+        {% endfor %}
+    </ul>
+
+
+        <a href="/add_medication/{{ patient.id }}">Dodaj nowe leki</a>
+
+</body>
+</html>
 
 
 
-<a href="{% url 'patient-details' patient.id %}?format=pdf" class="btn btn-primary">Dodaj zaktualizowaną listę leków</a>
+
 
 {% endblock %}

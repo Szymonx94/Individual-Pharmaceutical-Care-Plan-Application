@@ -17,10 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+
 from patients_app.views import FirstSiteView, AddPatientsView, AddDoctorsView, AddMedicamentView, \
     AddMedicalComponentView, PatientsListView, DoctorsListView, MedicamentListView, MedicalcomponentListView, \
     DoctorPrintOutListView, PatientsUpdateView, PatientsDeleteView, PatientsDetailsListView, LoginView, LogoutView, \
-    RegistrationView, PatientPrintOutListView
+    RegistrationView, PatientPrintOutListView, AddMedicationView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,5 +42,5 @@ urlpatterns = [
     path('register/', RegistrationView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-
+    path('add_medication/<int:patient_id>/', AddMedicationView.as_view(), name='add_medication'),
 ]

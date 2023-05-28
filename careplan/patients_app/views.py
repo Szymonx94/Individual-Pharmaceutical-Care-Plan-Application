@@ -1,12 +1,14 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from django.views import View
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
+from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView, TemplateView
 from django.contrib.messages.views import SuccessMessageMixin
-from .forms import PatientsForm, DoctorsForm, MedicamentForm, MedicalComponentForm, RegistrationForm
+from .forms import PatientsForm, DoctorsForm, MedicamentForm, MedicalComponentForm, RegistrationForm, \
+    PatientsMedicamentForm
 from .models import Patients, Doctors, Medicament, MedicalComponent, Slider
 from django.contrib import messages
 
@@ -25,7 +27,7 @@ class FirstSiteView(View):
         context = {
             'slider': sliderdata
         }
-        return TemplateResponse(request, 'first_page.html',context)
+        return TemplateResponse(request, 'first_page.html', context)
 
 
 class AddPatientsView(SuccessMessageMixin, CreateView):
@@ -203,7 +205,7 @@ class DoctorPrintOutListView(ListView):
 
 
 class PatientPrintOutListView(ListView):
-    """ Views for patient printout"""
+    """ Views for patients printout"""
     model = Patients
     template_name = 'doctor_printout.html'  # Name template HTML
     context_object_name = 'patients'  # Nazwa obiektu w kontekście szablonu
@@ -229,7 +231,6 @@ class PatientsDetailsListView(DetailView):
     context_object_name = 'patient'
     slug_field = 'id'
     slug_url_kwarg = 'id'
-
 
 
 class RegistrationView(View):
@@ -270,5 +271,21 @@ class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
         return redirect('login')
+
+
+class AddMedicationView(View):
+    template_name = 'patient_medicament_add.html'
+
+    def get(self, request, patient_id):
+        medications = Medicament.objects.all()
+        return render(request, self.template_name, {'medications': medications, 'patient_id': patient_id})
+
+    def post(self, request, patient_id):
+        medication_id = request.POST.get('medication')
+        patient = Patients.objects.get(id=patient_id)
+        medication = Medicament.objects.get(id=medication_id)
+        patient.medicament.add(medication)
+        return redirect(reverse('patient-details', kwargs={'pk': patient_id}))
+
 
 

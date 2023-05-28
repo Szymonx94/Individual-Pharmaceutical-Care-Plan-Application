@@ -101,3 +101,17 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+
+class PatientsMedicamentForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(PatientsMedicamentForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+
+
+    class Meta:
+        model = Medicament
+        fields = '__all__'
+
