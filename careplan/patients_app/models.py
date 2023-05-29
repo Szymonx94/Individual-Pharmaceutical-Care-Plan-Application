@@ -32,6 +32,7 @@ class Patients(models.Model):
     drugs_list = models.TextField()
     medicament = models.ManyToManyField(Medicament, related_name='patients')
 
+
     def __str__(self):
         return self.first_name, self.last_name
 
@@ -44,6 +45,7 @@ class Doctors(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     specialization = models.CharField(max_length=100)
+    email = models.EmailField(max_length=254, default='')
 
 
 class MedicalComponent(models.Model):
@@ -52,7 +54,7 @@ class MedicalComponent(models.Model):
     """
     name = models.CharField(max_length=64)
     description = models.TextField()
-    patients = models.ManyToManyField(Patients)
+    patients = models.ManyToManyField(Patients, related_name='medical_component')
 
 
 class DateAdd(models.Model):
@@ -60,7 +62,7 @@ class DateAdd(models.Model):
     Model for adding dates of visits
     """
     data_add = models.DateTimeField(null=True)
-    patients = models.ForeignKey(Patients, on_delete=models.PROTECT, null=True)
+    patients = models.ForeignKey(Patients, on_delete=models.PROTECT, null=True, related_name='date_add')
 
 
 class Slider(models.Model):
@@ -70,3 +72,16 @@ class Slider(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class MedicalNote(models.Model):
+    patient = models.ForeignKey(Patients, on_delete=models.CASCADE, related_name='medical_notes')
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Prescription(models.Model):
+    patient = models.ForeignKey(Patients, on_delete=models.CASCADE, related_name='prescriptions')
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+

@@ -8,8 +8,8 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView, TemplateView
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import PatientsForm, DoctorsForm, MedicamentForm, MedicalComponentForm, RegistrationForm, \
-    PatientsMedicamentForm
-from .models import Patients, Doctors, Medicament, MedicalComponent, Slider
+    PatientsMedicamentForm, MedicalNoteForm, PrescriptionForm
+from .models import Patients, Doctors, Medicament, MedicalComponent, Slider, MedicalNote, Prescription
 from django.contrib import messages
 
 
@@ -51,6 +51,8 @@ class PatientsListView(ListView):
     template_name = 'patients_list.html'
     ordering = 'id'
     context_object_name = 'patients'
+
+
 
     def get_queryset(self):
         query = self.request.GET.get('search')
@@ -274,6 +276,7 @@ class LogoutView(LoginRequiredMixin, View):
 
 
 class AddMedicationView(View):
+    """Added to the patients list new actual medicament"""
     template_name = 'patient_medicament_add.html'
 
     def get(self, request, patient_id):
@@ -281,11 +284,69 @@ class AddMedicationView(View):
         return render(request, self.template_name, {'medications': medications, 'patient_id': patient_id})
 
     def post(self, request, patient_id):
-        medication_id = request.POST.get('medication')
+        medication_ids = request.POST.getlist('medication')
         patient = Patients.objects.get(id=patient_id)
-        medication = Medicament.objects.get(id=medication_id)
-        patient.medicament.add(medication)
+
+        for medication_id in medication_ids:
+            medication = Medicament.objects.get(id=medication_id)
+            patient.medicament.add(medication)
+
         return redirect(reverse('patient-details', kwargs={'pk': patient_id}))
 
 
+class AddMedicalComponentForPatientView(View):
+    """Add new medical components to the patient's list"""
+    template_name = 'patient_medical_component_add.html'
 
+    def get(self, request, patient_id):
+        medical_components = MedicalComponent.objects.all()
+        return render(request, self.template_name, {'medical_components': medical_components, 'patient_id': patient_id})
+
+    def post(self, request, patient_id):
+        medical_component_id_list = request.POST.getlist('medical_component')
+        patient = get_object_or_404(Patients, id=patient_id)
+
+        for medical_component_id in medical_component_id_list:
+            medical_component = get_object_or_404(MedicalComponent, id=medical_component_id)
+            medical_component.patients.add(patient)  # Dodajemy pacjenta do pola ManyToManyField
+
+        # Pobierz pacjenta ponownie z bazy danych, aby mieć aktualne dane
+        patient = get_object_or_404(Patients, id=patient_id)
+
+        return render(request, 'patient-details.html', {'patient': patient})
+
+class MedicalNoteCreateView(CreateView):
+    model = MedicalNote
+    form_class = MedicalNoteForm
+    template_name = 'medicalnote_form.html'
+
+    def form_valid(self, form):
+        patient_id = self.kwargs['patient_id']
+        patient = get_object_or_404(Patients, id=patient_id)
+        form.instance.patient = patient
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        patient_id = self.kwargs['patient_id']
+        return reverse_lazy('patient-details', kwargs={'pk': self.kwargs['patient_id']})
+
+
+
+class PrescriptionCreateView(CreateView):
+    model = Prescription
+    form_class = PrescriptionForm
+    template_name = 'prescription_form.html'
+
+    def form_valid(self, form):
+        patient_id = self.kwargs['patient_id']
+        patient = get_object_or_404(Patients, id=patient_id)
+        form.instance.patient = patient
+        return super().form_valid(form)
+    def get_success_url(self):
+        return reverse('patient-details', kwargs={'pk': self.kwargs['patient_id']})
+
+
+class PrescriptionDetailView(DetailView):
+    model = Prescription
+    template_name = 'prescription_detail.html'
+    context_object_name = 'prescription'

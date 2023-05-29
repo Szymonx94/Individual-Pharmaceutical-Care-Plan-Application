@@ -47,15 +47,65 @@
 
 </ul>
 
-   <h2>Nowa lista leków</h2>
+<h2>Nowa lista leków</h2>
+<ul>
+    {% for medication in object.medicament.all %}
+    <li>{{ medication.name }} --> {{ medication.descriptions }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Wyroby medyczne</h2>
+<ul>
+    {% for medical_components in object.medical_component.all %}
+    <li>
+        <strong>Nazwa:</strong> {{ medical_components.name }}<br>
+        <strong>Opis:</strong> {{ medical_components.description }}
+    </li>
+    {% empty %}
+    <li>Brak</li>
+    {% endfor %}
+</ul>
+
+<h4>Notatki medyczne</h4>
     <ul>
-        {% for medication in object.medicament.all %}
-            <li>{{ medication.name }} --> {{ medication.descriptions }}</li>
+        {% for note in object.medical_notes.all %}
+            <li>
+                <p>Treść: {{ note.description }} Data utworzenia: {{ note.created_at }}</p>
+
+            </li>
+        {% empty %}
+            <li>Brak notatek medycznych</li>
         {% endfor %}
     </ul>
 
+<h4>Notatka dla lekarza</h4>
+<ul>
+    {% for notes in object.prescriptions.all %}
+        <li>
+            <p>Treść: {{ notes.description }}</p>
+            <p>Data utworzenia: {{ notes.created_at }}</p>
+        </li>
+    {% empty %}
+        <li>Brak notatek medycznych</li>
+    {% endfor %}
+</ul>
 
-        <a href="/add_medication/{{ patient.id }}">Dodaj nowe leki</a>
+
+
+
+
+<ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="/add_medication/{{ patient.id }}/">Dodaj nowe leki</a></li>
+    <li><a class="dropdown-item" href="/add_medicalcomponent/{{ patient.id }}/">Dodaj wyrób medyczny</a></li>
+    <li><a class="dropdown-item" href="/add_medicalnote/{{ patient.id }}/">Dodaj notatkę dla pacjenta</a></li>
+    <li><a class="dropdown-item" href="/add_prescription/{{ patient.id }}/">Dodaj notatkę dla lekarza</a></li>
+    <li>
+        <hr class="dropdown-divider">
+    </li>
+
+
+</ul>
+
 
 </body>
 </html>

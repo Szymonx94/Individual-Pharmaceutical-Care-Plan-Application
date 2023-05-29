@@ -1,8 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .models import Patients, Doctors, Medicament, MedicalComponent
-from django.forms import ModelForm
+from .models import Patients, Doctors, Medicament, MedicalComponent, MedicalNote, Prescription
+
 from django import forms
 
 
@@ -61,7 +61,6 @@ class MedicamentForm(forms.ModelForm):
         self.fields['name'].widget.attrs['placeholder'] = 'Podaj nazwę'
         self.fields['descriptions'].widget.attrs['placeholder'] = 'Podaj zastosowanie'
 
-
     class Meta:
         model = Medicament
         fields = ['name', 'descriptions']
@@ -90,6 +89,7 @@ class MedicalComponentForm(forms.ModelForm):
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField()
+
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
@@ -98,9 +98,11 @@ class RegistrationForm(UserCreationForm):
         self.fields['email'].widget.attrs['placeholder'] = 'Podaj email'
         self.fields['password1'].widget.attrs['placeholder'] = 'Podaj hasło'
         self.fields['password2'].widget.attrs['placeholder'] = 'Powtórz hasło'
+
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+
 
 class PatientsMedicamentForm(forms.ModelForm):
 
@@ -109,9 +111,24 @@ class PatientsMedicamentForm(forms.ModelForm):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
-
-
     class Meta:
         model = Medicament
         fields = '__all__'
 
+
+class MedicalNoteForm(forms.ModelForm):
+    class Meta:
+        model = MedicalNote
+        fields = ['description']
+        widgets = {
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+
+
+class PrescriptionForm(forms.ModelForm):
+    class Meta:
+        model = Prescription
+        fields = ['description']
+        widgets = {
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }

@@ -1,20 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+</head>
 <body>
-<h1>Add Medication</h1>
+    <div class="container">
+        <h1>Add Medication</h1>
 
-    <form method="post" action="/add_medication/{{ patient_id }}/">
-        {% csrf_token %}
-        <select name="medication">
-            {% for medication in medications %}
-                <option value="{{ medication.id }}">{{ medication.name }} --> {{medication.descriptions}}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Add">
-    </form>
-
+        <form method="post" action="/add_medication/{{ patient_id }}/" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="medication">Medication</label>
+                <select name="medication" multiple class="form-control">
+                    {% for medication in medications %}
+                        <option value="{{ medication.id }}">{{ medication.name }} --> {{ medication.descriptions }}</option>
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">Please select at least one medication.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </body>
+
 
 
 {% endblock %}
