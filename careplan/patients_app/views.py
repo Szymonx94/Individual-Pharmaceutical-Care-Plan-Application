@@ -8,8 +8,8 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView, TemplateView
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import PatientsForm, DoctorsForm, MedicamentForm, MedicalComponentForm, RegistrationForm, \
-    PatientsMedicamentForm, MedicalNoteForm, PrescriptionForm
-from .models import Patients, Doctors, Medicament, MedicalComponent, Slider, MedicalNote, Prescription
+    PatientsMedicamentForm, MedicalNoteForm, PrescriptionForm, DateAddForm
+from .models import Patients, Doctors, Medicament, MedicalComponent, Slider, MedicalNote, Prescription, DateAdd
 from django.contrib import messages
 
 
@@ -345,8 +345,37 @@ class PrescriptionCreateView(CreateView):
     def get_success_url(self):
         return reverse('patient-details', kwargs={'pk': self.kwargs['patient_id']})
 
+class DateAddCreateView(CreateView):
+    model = DateAdd
+    form_class = DateAddForm
+    template_name = 'date_add_form.html'
 
-class PrescriptionDetailView(DetailView):
-    model = Prescription
-    template_name = 'prescription_detail.html'
-    context_object_name = 'prescription'
+    def form_valid(self, form):
+        patient_id = self.kwargs['patient_id']
+        patient = get_object_or_404(Patients, id=patient_id)
+        form.instance.patients = patient
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        patient_id = self.kwargs['patient_id']
+        return reverse('patient-details', kwargs={'pk': patient_id})
+
+class DetailForPatientsListView(DetailView):
+    """ Views for patients printout"""
+    model = Patients
+    template_name = 'detail_list_for_patients.html'  # Name template HTML
+    context_object_name = 'patient'
+    slug_field = 'id'
+    slug_url_kwarg = 'id'
+
+class DetailForDoctorsListView(DetailView):
+    """ Views for doctors printout"""
+    model = Patients
+    template_name = 'detail_list_for_doctors.html'  # Name template HTML
+    context_object_name = 'patient'
+    slug_field = 'id'
+    slug_url_kwarg = 'id'
+
+
+
+

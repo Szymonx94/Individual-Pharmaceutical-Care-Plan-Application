@@ -22,7 +22,7 @@
     <tbody>
     {% for patients in object_list %}
     <tr>
-        <td><a href="/patient_details/{{ patient.id }}/">{{ patients.id }}</a></td>
+        <td><a href="/details_list_for_patients/{{ patient.id }}/">{{ patients.id }}</a></td>
         <td>{{ patients.first_name }}</td>
         <td>{{ patients.last_name }}</td>
         <td>{{ patients.address }}</td>

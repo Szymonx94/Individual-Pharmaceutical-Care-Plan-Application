@@ -22,7 +22,8 @@ from patients_app.views import FirstSiteView, AddPatientsView, AddDoctorsView, A
     AddMedicalComponentView, PatientsListView, DoctorsListView, MedicamentListView, MedicalcomponentListView, \
     DoctorPrintOutListView, PatientsUpdateView, PatientsDeleteView, PatientsDetailsListView, LoginView, LogoutView, \
     RegistrationView, PatientPrintOutListView, AddMedicationView, AddMedicalComponentForPatientView, \
-    PrescriptionCreateView, MedicalNoteCreateView
+    PrescriptionCreateView, MedicalNoteCreateView, DateAddCreateView, DetailForPatientsListView, \
+    DetailForDoctorsListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -47,5 +48,8 @@ urlpatterns = [
     path('add_medicalcomponent/<int:patient_id>/', AddMedicalComponentForPatientView.as_view(), name='add_medical_component'),
     path('add_medicalnote/<int:patient_id>/', MedicalNoteCreateView.as_view(), name='add-medicalnote'),
     path('add_prescription/<int:patient_id>/', PrescriptionCreateView.as_view(), name='add-prescription'),
+    path("date_add/<int:patient_id>/", DateAddCreateView.as_view(), name='date-add'),
+    path("details_list_for_patients/<int:pk>/", DetailForPatientsListView.as_view(), name='details-list-for-patients'),
+    path("details_list_for_doctors/<int:pk>/", DetailForDoctorsListView.as_view(), name='details-list-for-doctors'),
 
 ]

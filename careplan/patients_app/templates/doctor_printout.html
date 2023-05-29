@@ -20,13 +20,13 @@
     </tr>
     </thead>
     <tbody>
-    {% for patients in object_list %}
+    {% for patient in object_list %}
     <tr>
-        <td><a href="/patient_details/{{ patient.id }}/">{{ patients.id }}</a></td>
-        <td>{{ patients.first_name }}</td>
-        <td>{{ patients.last_name }}</td>
-        <td>{{ patients.address }}</td>
-        <td>{{ patients.pesel }}</td>
+        <td><a href="/details_list_for_doctors/{{ patient.id }}/">{{ patient.id }}</a></td>
+        <td>{{ patient.first_name }}</td>
+        <td>{{ patient.last_name }}</td>
+        <td>{{ patient.address }}</td>
+        <td>{{ patient.pesel }}</td>
     </tr>
 
     {% empty %}

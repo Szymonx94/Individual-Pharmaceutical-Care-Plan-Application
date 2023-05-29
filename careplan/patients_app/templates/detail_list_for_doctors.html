@@ -3,10 +3,6 @@
 
 
 
-<h2>Szczegóły:</h2>
-
-
-
 <table class="table">
     <thead>
     <tr>
@@ -38,22 +34,7 @@
     </tbody>
 </table>
 
-<ul class="nav-item dropdown">
-    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown"
-       aria-expanded="false">
-        <button type="button" class="btn btn-secondary btn-lg btn-block">Dodaj nowe informacje </button>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-center">
-        <li><a class="dropdown-item" href="/add_medication/{{ patient.id }}/">Dodaj nowe leki</a></li>
-        <li><a class="dropdown-item" href="/add_medicalcomponent/{{ patient.id }}/">Dodaj wyrób medyczny</a></li>
-        <li><a class="dropdown-item" href="/add_medicalnote/{{ patient.id }}/">Dodaj notatkę dla pacjenta</a></li>
-        <li><a class="dropdown-item" href="/add_prescription/{{ patient.id }}/">Dodaj notatkę dla lekarza</a></li>
-        <li><a class="dropdown-item" href="/date_add/{{ patient.id }}/">Dodaj datę wizyty</a></li>
-        <li>
-            <hr class="dropdown-divider">
-        </li>
-    </ul>
-</ul>
+
 
 <h3>Opis chorób:</h3>
 <ul>
@@ -88,18 +69,6 @@
     {% endfor %}
 </ul>
 
-<h4>Notatki medyczne  </h4>
-    <ul>
-        {% for note in object.medical_notes.all %}
-            <li>
-                <p>Treść: {{ note.description }} Data utworzenia: {{ note.created_at }}</p>
-
-            </li>
-        {% empty %}
-            <li>Brak notatek medycznych</li>
-        {% endfor %}
-    </ul>
-
 <h4>Notatka dla lekarza</h4>
 <ul>
     {% for notes in object.prescriptions.all %}
@@ -112,6 +81,7 @@
     {% endfor %}
 </ul>
 
+
 <h4>Daty odbytych wizyt</h4>
 <ul>
     {% for date in object.date_add.all %}
@@ -123,9 +93,6 @@
         <li>Brak wizyt</li>
     {% endfor %}
 </ul>
-
-
-
 
 
 
