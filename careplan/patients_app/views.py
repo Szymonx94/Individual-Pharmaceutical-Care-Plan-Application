@@ -1,14 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from django.views import View
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView, TemplateView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import PatientsForm, DoctorsForm, MedicamentForm, MedicalComponentForm, RegistrationForm, \
-    PatientsMedicamentForm, MedicalNoteForm, PrescriptionForm, DateAddForm
+     MedicalNoteForm, PrescriptionForm, DateAddForm
 from .models import Patients, Doctors, Medicament, MedicalComponent, Slider, MedicalNote, Prescription, DateAdd
 from django.contrib import messages
 
@@ -52,8 +51,6 @@ class PatientsListView(ListView):
     ordering = 'id'
     context_object_name = 'patients'
 
-
-
     def get_queryset(self):
         query = self.request.GET.get('search')
         if query:
@@ -84,10 +81,14 @@ class PatientsDeleteView(DeleteView):
 
 
 class AddDoctorsView(CreateView):
-    """Added to the patient database"""
+    """Add to the doctor in database"""
     model = Doctors
     success_url = reverse_lazy('first-page')
     form_class = DoctorsForm
+
+    def __init__(self, **kwargs):
+        super().__init__(kwargs)
+        self.success_message = None
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -156,7 +157,6 @@ class AddMedicalComponentView(SuccessMessageMixin, CreateView):
     model = MedicalComponent
     success_url = reverse_lazy('first-page')
     form_class = MedicalComponentForm
-    success_message = 'Dodano wyrób medyczny!'
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -310,10 +310,10 @@ class AddMedicalComponentForPatientView(View):
             medical_component = get_object_or_404(MedicalComponent, id=medical_component_id)
             medical_component.patients.add(patient)  # Dodajemy pacjenta do pola ManyToManyField
 
-        # Pobierz pacjenta ponownie z bazy danych, aby mieć aktualne dane
-        patient = get_object_or_404(Patients, id=patient_id)
+        # patient = get_object_or_404(Patients, id=patient_id)
 
-        return render(request, 'patient-details.html', {'patient': patient})
+        return redirect(reverse('patient-details', kwargs={'pk': patient_id}))
+
 
 class MedicalNoteCreateView(CreateView):
     model = MedicalNote
@@ -327,9 +327,8 @@ class MedicalNoteCreateView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        patient_id = self.kwargs['patient_id']
+        # patient_id = self.kwargs['patient_id']
         return reverse_lazy('patient-details', kwargs={'pk': self.kwargs['patient_id']})
-
 
 
 class PrescriptionCreateView(CreateView):
@@ -342,8 +341,10 @@ class PrescriptionCreateView(CreateView):
         patient = get_object_or_404(Patients, id=patient_id)
         form.instance.patient = patient
         return super().form_valid(form)
+
     def get_success_url(self):
         return reverse('patient-details', kwargs={'pk': self.kwargs['patient_id']})
+
 
 class DateAddCreateView(CreateView):
     model = DateAdd
@@ -360,6 +361,7 @@ class DateAddCreateView(CreateView):
         patient_id = self.kwargs['patient_id']
         return reverse('patient-details', kwargs={'pk': patient_id})
 
+
 class DetailForPatientsListView(DetailView):
     """ Views for patients printout"""
     model = Patients
@@ -368,6 +370,7 @@ class DetailForPatientsListView(DetailView):
     slug_field = 'id'
     slug_url_kwarg = 'id'
 
+
 class DetailForDoctorsListView(DetailView):
     """ Views for doctors printout"""
     model = Patients
@@ -375,7 +378,3 @@ class DetailForDoctorsListView(DetailView):
     context_object_name = 'patient'
     slug_field = 'id'
     slug_url_kwarg = 'id'
-
-
-
-

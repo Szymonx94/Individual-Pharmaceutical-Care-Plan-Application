@@ -2,6 +2,12 @@
 {% block content %}
 
 
+    <style>
+    h3 {
+        border-bottom: 1px solid gray;
+        margin-bottom: 10px;
+    }
+</style>
 
 <h2>Szczegóły:</h2>
 
@@ -69,14 +75,14 @@
 
 </ul>
 
-<h2>Nowa lista leków</h2>
+<h3>Nowa lista leków</h3>
 <ul>
     {% for medication in object.medicament.all %}
     <li>{{ medication.name }} --> {{ medication.descriptions }}</li>
     {% endfor %}
 </ul>
 
-<h2>Wyroby medyczne</h2>
+<h3>Wyroby medyczne</h3>
 <ul>
     {% for medical_components in object.medical_component.all %}
     <li>
@@ -88,7 +94,7 @@
     {% endfor %}
 </ul>
 
-<h4>Notatki medyczne  </h4>
+<h3>Notatki medyczne  </h3>
     <ul>
         {% for note in object.medical_notes.all %}
             <li>
@@ -100,7 +106,7 @@
         {% endfor %}
     </ul>
 
-<h4>Notatka dla lekarza</h4>
+<h3>Notatka dla lekarza</h3>
 <ul>
     {% for notes in object.prescriptions.all %}
         <li>
@@ -112,7 +118,7 @@
     {% endfor %}
 </ul>
 
-<h4>Daty odbytych wizyt</h4>
+<h3>Daty odbytych wizyt</h3>
 <ul>
     {% for date in object.date_add.all %}
         <li>
