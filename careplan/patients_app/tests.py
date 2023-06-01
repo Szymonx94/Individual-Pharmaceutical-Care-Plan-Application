@@ -1,9 +1,11 @@
 from unittest import TestCase
 
+from django.contrib.auth.backends import UserModel
+from django.contrib.auth.models import User
 from django.test import Client
 from django.urls import reverse
-from .models import Slider, Patients, Doctors, Medicament, MedicalComponent
-from .forms import PatientsForm
+from .models import Slider, Patients, Doctors, Medicament, MedicalComponent, MedicalNote, Prescription, DateAdd
+from .forms import PatientsForm, RegistrationForm
 import pytest
 
 
@@ -208,12 +210,139 @@ def test_doctor_printout_view_with_search(client):
     assert response.context['patients'][0].pesel == '56789012345'
 
 @pytest.mark.django_db
-def test_doctor_printout_view_without_search(client):
-    # Tworzenie pacjentów do testu
+def test_patient_printout_view_with_search(client):
     patient1 = Patients.objects.create(first_name="Jan", last_name="Kowalski", pesel="12345678901")
     patient2 = Patients.objects.create(first_name="Anna", last_name="Nowak", pesel="98765432109")
     patient3 = Patients.objects.create(first_name="Adam", last_name="Nowicki", pesel="56789012345")
-    response = client.get(reverse('doctor-printout'))
+    response = client.get(reverse('patient-printout'), {'search': '56789012345'})
     assert response.status_code == 200
-    assert len(response.context['patients']) == 3
-    assert response.context['patients'][0].id < response.context['patients'][1].id < response.context['patients'][2].id
+    assert len(response.context['patients']) == 1
+    assert response.context['patients'][0].pesel == '56789012345'
+
+@pytest.mark.django_db
+def test_patient_details_view(client):
+    # Tworzenie pacjenta do testu
+    patient = Patients.objects.create(first_name="Jan", last_name="Kowalski", pesel="12345678901")
+    response = client.get(reverse('patient-details', kwargs={'pk': patient.id}))
+    assert response.status_code == 200
+    assert response.context['patient'].id == patient.id
+    assert response.context['patient'].first_name == "Jan"
+    assert response.context['patient'].last_name == "Kowalski"
+    assert response.context['patient'].pesel == "12345678901"
+
+
+@pytest.mark.django_db
+def test_patient_details_view_invalid_id(client):
+    response = client.get(reverse('patient-details', kwargs={'pk': 9954599}))
+    assert response.status_code == 404
+
+
+
+@pytest.mark.django_db
+def test_registration_view_invalid_form(client):
+    response = client.post(reverse('register'), data={})
+    assert UserModel.objects.count() == 0
+    assert response.status_code == 200
+    assert isinstance(response.context['form'], RegistrationForm)
+
+@pytest.mark.django_db
+class LoginViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.login_url = reverse('login')
+        self.first_page_url = reverse('first-page')
+        self.username = 'testuser'
+        self.password = 'testpassword'
+        self.user = User.objects.create_user(username=self.username, password=self.password)
+
+    def test_login_view_get(self):
+        response = self.client.get(self.login_url)
+        self.assertEqual(response.status_code, 200)
+
+
+@pytest.mark.django_db
+def test_add_medication_view_get(client):
+    patient = Patients.objects.create(first_name='Kamil')
+    medicament1 = Medicament.objects.create(name='Medicament 1')
+    medicament2 = Medicament.objects.create(name='Medicament 2')
+    url = reverse('add_medication', kwargs={'patient_id': patient.id})
+
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert any(template.name == 'patient_medicament_add.html' for template in response.templates)
+    assert medicament1.name in response.content.decode()
+    assert medicament2.name in response.content.decode()
+    assert response.context['patient_id'] == patient.id
+
+
+@pytest.mark.django_db
+def test_add_medical_component_view_get(client):
+    patient = Patients.objects.create(first_name='Kamil')
+    component1 = MedicalComponent.objects.create(name='Component 1')
+    component2 = MedicalComponent.objects.create(name='Component 2')
+    url = reverse('add_medical_component', kwargs={'patient_id': patient.id})
+
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert any(template.name == 'patient_medical_component_add.html' for template in response.templates)
+    assert component1.name in response.content.decode()
+    assert component2.name in response.content.decode()
+    assert response.context['patient_id'] == patient.id
+
+@pytest.mark.django_db
+def test_medical_note_create_view_post(client):
+    patient = Patients.objects.create(first_name='Kamil')
+    data = {
+        'description': 'Notatka.',
+    }
+    url = reverse('add-medicalnote', kwargs={'patient_id': patient.id})
+    response = client.post(url, data=data)
+    assert response.status_code == 302  # Check the expected redirect status code
+    medical_note = MedicalNote.objects.last()
+    assert medical_note.patient == patient
+    assert medical_note.description == data['description']
+
+@pytest.mark.django_db
+def test_prescription_create_view_post(client):
+    patient = Patients.objects.create(first_name='Kamil')
+    data = {
+        'description': 'Notatka dla lekarza',
+    }
+    url = reverse('add-prescription', kwargs={'patient_id': patient.id})
+    response = client.post(url, data=data)
+    assert response.status_code == 302  # Check the expected redirect status code
+    medical_note = Prescription.objects.last()
+    assert medical_note.patient == patient
+    assert medical_note.description == data['description']
+
+@pytest.mark.django_db
+def test_date_add_create_view_post(client):
+    patient = Patients.objects.create(first_name='Kamil')
+    data = {
+        'data_add': '2023-05-31',
+
+    }
+    url = reverse('date-add', kwargs={'patient_id': patient.id})
+
+    response = client.post(url, data=data)
+    assert response.status_code == 302
+
+    date_add = DateAdd.objects.last()
+    assert date_add.patients == patient
+    assert date_add.data_add.strftime('%Y-%m-%d') == data['data_add']
+
+
+@pytest.mark.django_db
+def test_detail_for_patients_list_view():
+    client = Client()
+    patient = Patients.objects.create(first_name='Kamil', last_name='Kowalski')
+    url = reverse('patient-details', kwargs={'pk': patient.id})
+
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert response.template_name == ['details_list.html']
+    assert response.context['patient'] == patient
+
