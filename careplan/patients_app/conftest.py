@@ -33,3 +33,19 @@ def patients():
         drugs_list='Lista leków'
     )
     return patient
+
+@pytest.fixture
+def doctors():
+
+    data = [
+        {'first_name': 'Jan', 'last_name': 'Drak'},
+        {'first_name': 'Jarek', 'last_name': 'Doe'},
+        {'first_name': 'Antoni', 'last_name': 'Smith'},
+    ]
+
+    doctors = []
+    for entry in data:
+        doctor = Doctors.objects.create(first_name=entry['first_name'], last_name=entry['last_name'])
+        doctors.append(doctor)
+
+    return doctors

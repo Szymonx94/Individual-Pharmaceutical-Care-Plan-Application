@@ -92,9 +92,9 @@ class AddDoctorsView(CreateView):
     success_url = reverse_lazy('first-page')
     form_class = DoctorsForm
 
-    def __init__(self, **kwargs):
-        super().__init__(kwargs)
-        self.success_message = None
+    # def __init__(self, **kwargs):
+    #     super().__init__(kwargs)
+    #     self.success_message = None
 
     def form_valid(self, form):
         response = super().form_valid(form)

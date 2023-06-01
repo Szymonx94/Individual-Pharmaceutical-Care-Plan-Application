@@ -41,14 +41,16 @@ class DoctorsForm(forms.ModelForm):
         self.fields['first_name'].widget.attrs['placeholder'] = 'Podaj Imię'
         self.fields['last_name'].widget.attrs['placeholder'] = 'Podaj Nazwisko'
         self.fields['specialization'].widget.attrs['placeholder'] = 'Podaj Specjalizację'
+        self.fields['email'].widget.attrs['placeholder'] = 'Podaj email'
 
     class Meta:
         model = Doctors
-        fields = ['first_name', 'last_name', 'specialization']
+        fields = ['first_name', 'last_name', 'specialization', 'email']
         labels = {
             'first_name': 'Imię',
             'last_name': 'Nazwisko',
-            'specialization': 'Specjalizacja'
+            'specialization': 'Specjalizacja',
+            'email': 'Email'
         }
 
 
