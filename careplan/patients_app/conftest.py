@@ -32,4 +32,4 @@ def patients():
         description_of_diseases='Opis chorób',
         drugs_list='Lista leków'
     )
-    return model_to_dict(patient)
+    return patient

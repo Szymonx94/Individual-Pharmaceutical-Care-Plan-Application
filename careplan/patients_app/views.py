@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from django.views import View
@@ -71,6 +72,11 @@ class PatientsUpdateView(UpdateView):
     form_class = PatientsForm
     template_name = 'patients_update.html'
     success_url = '/patients_list/'
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class PatientsDeleteView(DeleteView):

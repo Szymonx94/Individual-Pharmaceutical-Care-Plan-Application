@@ -59,3 +59,25 @@ def test_patients_list_view_search(client, patients):
     assert len(response.context['patients']) == 1
     assert 'search_query' in response.context
     assert response.context['search_query'] == '15131612145'
+
+
+@pytest.mark.django_db
+def test_update_patients_view(user, client, patients):
+    client.force_login(user=user)
+    response = client.get(reverse('patients-edit', kwargs={"pk": patients.id}))
+    assert response.status_code == 200
+    edit = {
+        "first_name": 'Kamil',
+        "last_name": 'Kowalski',
+        "year_of_birth": 1994,
+        "age": 32,
+    }
+    response = client.post(
+        reverse('patients-edit', kwargs={"pk": patients.id}), data=edit
+    )
+    assert response.status_code == 302
+    patients.refresh_from_db()
+    assert patients.first_name == edit["first_name"]
+    assert patients.last_name == edit["last_name"]
+    assert patients.year_of_birth == edit["year_of_birth"]
+    assert patients.age == edit["age"]

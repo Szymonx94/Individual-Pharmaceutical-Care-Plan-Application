@@ -19,8 +19,8 @@ class Patients(models.Model):
         ('M', 'Mężczyzna'),
         ('K', 'Kobieta'),
     )
-    first_name = models.CharField(max_length=64)
-    last_name = models.CharField(max_length=64)
+    first_name = models.CharField(max_length=64, blank=True)
+    last_name = models.CharField(max_length=64, blank=True)
     year_of_birth = models.PositiveIntegerField(null=True)
     age = models.PositiveIntegerField(null=True)
     pesel = models.CharField(max_length=11)

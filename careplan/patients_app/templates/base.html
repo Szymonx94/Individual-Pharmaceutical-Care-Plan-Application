@@ -18,7 +18,7 @@
     <div class="container-fluid">
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex justify-content-center">
                 {% if user.is_authenticated %}
 
                 <li class="nav-item" data-bs-theme="dark">
@@ -81,8 +81,11 @@
         </div>
     </div>
 </nav>
+
 <br>
 {% block content %}{% endblock content %}
 
 </body>
 </html>
+
+

@@ -8,12 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- animate css link -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <!-- google font link -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Coiny&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Coiny&display=swap" rel="stylesheet">
 
     <style>
         .carousel-caption h1,
@@ -32,20 +32,21 @@
 
 <body>
 
-    <!-- slider section -->
-    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+<!-- slider section -->
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
                 aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
                 aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
                 aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-            {% for object in slider%}
+    </div>
+    <div class="carousel-inner">
+        {% for object in slider %}
             <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
-                <img src="{{object.image.url}}" style="height:650px;" class="testi-overly d-block w-100" alt="sliderImg">
+                <img src="{{ object.image.url }}" style="height:650px;" class="testi-overly d-block w-100"
+                     alt="sliderImg">
                 <div class="carousel-caption d-none d-md-block">
                     <h1 class="animate__animated
                     {% if forloop.counter0 == 0 %}
@@ -56,22 +57,27 @@
                     {% endif %}
                     {% if forloop.revcounter == 2 %}
                     animate__fadeInRight
-                    {% endif %}">{{object.title}}</h1>
-                    <h3 class="animate__animated animate__zoomIn">{{object.description}}</h3>
+                    {% endif %}">{{ object.title }}</h1>
+                    <h3 class="animate__animated animate__zoomIn">{{ object.description }}</h3>
                     {% if forloop.counter0 == 0 %}
-                    <a href="/patients_list/" class="button animate__animated animate__zoomIn mt-3 py-3 px-5 btn font-weight-bold">Przejdź do listy pacjentó </a>
+                        <a href="/patients_list/"
+                           class="button animate__animated animate__zoomIn mt-3 py-3 px-5 btn font-weight-bold">Przejdź
+                            do listy pacjentów </a>
                     {% elif forloop.counter0 == 1 %}
-                    <a href="/print_page/" class="button animate__animated animate__zoomIn mt-3 py-3 px-5 btn font-weight-bold">Przejdź do wydruku dla pacjenta</a>
+                        <a href="/print_page/"
+                           class="button animate__animated animate__zoomIn mt-3 py-3 px-5 btn font-weight-bold">Przejdź
+                            do wydruku dla pacjenta</a>
                     {% elif forloop.counter0 == 2 %}
-                    <a href="/add_patient/" class="button animate__animated animate__zoomIn mt-3 py-3 px-5 btn font-weight-bold">Przejdź do sekcji dodaj pacjenta</a>
+                        <a href="/add_patient/"
+                           class="button animate__animated animate__zoomIn mt-3 py-3 px-5 btn font-weight-bold">Przejdź
+                            do sekcji dodaj pacjenta</a>
                     {% endif %}
-<!--                    <div class="text-center"><a href="/patients_list/" class="btn-get-started">Przejdź do listy pacjentów</a></div>-->
+                    <!--                    <div class="text-center"><a href="/patients_list/" class="btn-get-started">Przejdź do listy pacjentów</a></div>-->
                 </div>
             </div>
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
-
+</div>
 
 
 </body>
