@@ -21,60 +21,60 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex justify-content-center">
                 {% if user.is_authenticated %}
 
-                <li class="nav-item" data-bs-theme="dark">
-                    <a class="nav-link active" aria-current="page" href="/">Strona Główna</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/patients_list/">Lista pacjentów</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/doctor/printout/">Wydruk dla lekarza</a>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/patient/printout/">Wydruk dla pacjenta</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        Baza danych
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/doctors_list/">Lekarze</a></li>
-                        <li><a class="dropdown-item" href="/medicament_list/">Leki</a></li>
-                        <li><a class="dropdown-item" href="/medicalcomponent_list/">Wyroby medyczne</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
+                    <li class="nav-item" data-bs-theme="dark">
+                        <a class="nav-link active" aria-current="page" href="/">Strona Główna</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/patients_list/">Lista pacjentów</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/doctor/printout/">Wydruk dla lekarza</a>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/patient/printout/">Wydruk dla pacjenta</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Baza danych
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/doctors_list/">Lekarze</a></li>
+                            <li><a class="dropdown-item" href="/medicament_list/">Leki</a></li>
+                            <li><a class="dropdown-item" href="/medicalcomponent_list/">Wyroby medyczne</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
 
 
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        Dodaj
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/add_patients/">Dodaj pacjenta</a></li>
-                        <li><a class="dropdown-item" href="/add_doctors/">Dodaj lekarza</a></li>
-                        <li><a class="dropdown-item" href="/add_medicament/">Dodaj lek</a></li>
-                        <li><a class="dropdown-item" href="/add_medicalcomponent/">Dodaj wyrób medyczny</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Dodaj
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/add_patients/">Dodaj pacjenta</a></li>
+                            <li><a class="dropdown-item" href="/add_doctors/">Dodaj lekarza</a></li>
+                            <li><a class="dropdown-item" href="/add_medicament/">Dodaj lek</a></li>
+                            <li><a class="dropdown-item" href="/add_medicalcomponent/">Dodaj wyrób medyczny</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
 
-                    </ul>
+                        </ul>
 
 
-                </li>
-                <ul>
+                    </li>
+                    <ul>
 
                     <li><a href="{% url 'logout' %}">Wyloguj</a></li>
-                    {% else %}
+                {% else %}
                     <li><a href="{% url 'login' %}">Zaloguj</a></li> |
 
                     <li><a href="{% url 'register' %}">Zarejestruj</a></li>
-                    {% endif %}
+                {% endif %}
                 </ul>
             </ul>
 

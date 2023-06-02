@@ -17,7 +17,7 @@
 
     <style>
         .carousel-caption h1,
-        .carousel-caption h3,
+        .carousel-caption h2,
         .carousel-caption a.button,
         .carousel-caption a.btn-get-started {
             color: black;
@@ -26,7 +26,9 @@
         .carousel-caption a {
             color: black !important;
             text-decoration: underline;
+
         }
+
     </style>
 </head>
 
@@ -58,17 +60,17 @@
                     {% if forloop.revcounter == 2 %}
                     animate__fadeInRight
                     {% endif %}">{{ object.title }}</h1>
-                    <h3 class="animate__animated animate__zoomIn">{{ object.description }}</h3>
+                    <h2 class="animate__animated animate__zoomIn">{{ object.description }}</h2>
                     {% if forloop.counter0 == 0 %}
                         <a href="/patients_list/"
                            class="button animate__animated animate__zoomIn mt-3 py-3 px-5 btn font-weight-bold">Przejdź
                             do listy pacjentów </a>
                     {% elif forloop.counter0 == 1 %}
-                        <a href="/print_page/"
+                        <a href="/patient/printout/"
                            class="button animate__animated animate__zoomIn mt-3 py-3 px-5 btn font-weight-bold">Przejdź
                             do wydruku dla pacjenta</a>
                     {% elif forloop.counter0 == 2 %}
-                        <a href="/add_patient/"
+                        <a href="/add_patients/"
                            class="button animate__animated animate__zoomIn mt-3 py-3 px-5 btn font-weight-bold">Przejdź
                             do sekcji dodaj pacjenta</a>
                     {% endif %}
