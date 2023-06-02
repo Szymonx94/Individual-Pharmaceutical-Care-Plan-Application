@@ -150,6 +150,12 @@ class DoctorsListView(ListView):
         context["search_query"] = self.request.GET.get("search", "")
         return context
 
+class DoctorsDeleteView(DeleteView):
+    """Delete doctor"""
+
+    model = Doctors
+    template_name = "doctors_delete.html"
+    success_url = reverse_lazy("doctors-list")
 
 class AddMedicamentView(SuccessMessageMixin, CreateView):
     """Added to the medicament database"""
@@ -186,6 +192,12 @@ class MedicamentListView(ListView):
         context["search_query"] = self.request.GET.get("search", "")
         return context
 
+class MedicamentDeleteView(DeleteView):
+    """Delete medicament"""
+
+    model = Medicament
+    template_name = "medicament_delete.html"
+    success_url = reverse_lazy("medicament-list")
 
 class AddMedicalComponentView(SuccessMessageMixin, CreateView):
     """Added to the medicalcomponent database"""

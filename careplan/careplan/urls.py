@@ -43,6 +43,7 @@ from patients_app.views import (
     DateAddCreateView,
     DetailForPatientsListView,
     DetailForDoctorsListView,
+    DoctorsDeleteView, MedicamentDeleteView,
 )
 
 urlpatterns = [
@@ -54,9 +55,11 @@ urlpatterns = [
     path("patients/delete/<int:pk>/", PatientsDeleteView.as_view(), name="patient-delete"),
     path("add_doctors/", AddDoctorsView.as_view(), name="add-doctors"),
     path("doctors_list/", DoctorsListView.as_view(), name="doctors-list"),
+    path("doctors/delete/<int:pk>/", DoctorsDeleteView.as_view(), name="doctor-delete"),
     path("add_medicament/", AddMedicamentView.as_view(), name="add-medicament"),
     path("medicament_list/", MedicamentListView.as_view(), name="medicament-list"),
     path("add_medicalcomponent/", AddMedicalComponentView.as_view(), name="add-medicalcomponent"),
+    path("medicament/delete/<int:pk>/", MedicamentDeleteView.as_view(), name="doctor-delete"),
     path(
         "medicalcomponent_list/",
         MedicalcomponentListView.as_view(),

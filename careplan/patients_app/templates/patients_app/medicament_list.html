@@ -21,7 +21,9 @@
     <tr>
         <td>{{ medicament.name }}</td>
         <td>{{ medicament.descriptions }}</td>
-
+        <td>
+            <a href="/medicament/delete/{{ medicament.id }}/">Usuń</a>
+        </td>
     </tr>
     {% empty %}
     <tr>

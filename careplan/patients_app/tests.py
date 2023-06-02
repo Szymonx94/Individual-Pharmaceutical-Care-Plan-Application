@@ -109,12 +109,12 @@ def test_patients_update_view_post(client):
         "age": 32,
     }
 
-    url = reverse("patients-edit", kwargs={"pk": patients.pk})
+    url = reverse("patients-edit", kwargs={"pk": patients.id})
     response = client.post(url, data=edit_data)
-
-    updated_patient = Patients.objects.get(pk=patients.pk)
     patients.refresh_from_db()
-    assert response.status_code == 200
+    updated_patient = Patients.objects.get(pk=patients.id)
+
+    assert response.status_code == 302
     assert updated_patient.first_name == edit_data["first_name"]
     assert updated_patient.last_name == edit_data["last_name"]
     assert updated_patient.year_of_birth == edit_data["year_of_birth"]
