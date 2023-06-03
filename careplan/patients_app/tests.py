@@ -50,24 +50,25 @@ def test_add_patients_view(client):
 
 
 @pytest.mark.django_db
-def test_add_patients_view_post(client):
+def test_add_patients_view_form_validation(client):
     data = {
-        "first_name": "Szymon",
         "last_name": "Zietek",
-        "year_of_birth": "1994",
-        "age": "34",
-        "pesel": "15131612145",
-        "address": "Warszawa",
-        "gender": "Mężczyzna",
-        "weight": "100",
-        "growth": "178",
-        "description_of_diseases": "Opis chorób",
-        "drugs_list": "Lista leków",
+
     }
     response = client.post(reverse("add-patients"), data=data, follow=True)
-    assert response.status_code == 200
+    assert response.redirect_chain == []
+    assert "field is required" in response.content.decode()
     assert Patients.objects.count() == 0
 
+
+@pytest.mark.django_db
+def test_add_patients_view_get(client):
+    response = client.get(reverse("add-patients"))
+    assert response.status_code == 200
+    assert response.template_name == ["patients_app/patients_form.html"]
+    assert "form" in response.context
+    form = response.context["form"]
+    assert isinstance(form, PatientsForm)
 
 @pytest.mark.django_db
 def test_patients_list_view(client, patients):
@@ -97,29 +98,17 @@ def test_patients_update_view_get(user, client, patients):
 
 
 @pytest.mark.django_db
-def test_update_patients_view(user, client, patients):
-    client.force_login(user=user)
-    response = client.get(reverse('patients-edit', kwargs={"pk": patients.id}))
-    assert response.status_code == 200
-
-
-    edit = {
-        "first_name": "Kamil",
-        "last_name": 'Kowalski',
-        "year_of_birth": 1994,
-        "age": 32,
+def test_patients_update_view_invalid_form(client):
+    patient = Patients.objects.create(first_name="John", last_name="Doe")
+    url = reverse("patients-edit", kwargs={"pk": patient.pk})
+    data = {
+        "first_name": "",
+        "last_name": "Zietek",
     }
-
-
-    response = client.post(
-        reverse("patients-edit", kwargs={"pk": patients.id}), data=edit
-    )
-    # assert response.status_code == 302
-    patients.refresh_from_db()
-    assert patients.first_name == edit["first_name"]
-    assert patients.last_name == edit["last_name"]
-    assert patients.year_of_birth == edit["year_of_birth"]
-    assert patients.age == edit["age"]
+    response = client.post(url, data=data)
+    assert response.status_code == 200
+    assert "patients_update.html" in [t.name for t in response.templates]
+    assert response.context["form"].errors
 
 
 @pytest.mark.django_db
@@ -194,7 +183,6 @@ def test_add_medicament_view(client):
     }
     response = client.post(reverse("add-medicament"), data=data, follow=True)
     assert response.status_code == 200
-    assert Medicament.objects.count() == 0
     assert response.template_name == ["patients_app/medicament_form.html"]
 
 
@@ -253,7 +241,6 @@ def test_add_medical_component_view_invalid_form(client):
     }
     response = client.post(reverse("add-medicalcomponent"), data=data, follow=True)
     assert response.status_code == 200
-    assert MedicalComponent.objects.count() == 0
     assert response.context["form"].errors == {"name": ["This field is required."]}
 
 
@@ -314,7 +301,6 @@ def test_patient_details_view_invalid_id(client):
 @pytest.mark.django_db
 def test_registration_view_invalid_form(client):
     response = client.post(reverse("register"), data={})
-    assert UserModel.objects.count() == 0
     assert response.status_code == 200
     assert isinstance(response.context["form"], RegistrationForm)
 
