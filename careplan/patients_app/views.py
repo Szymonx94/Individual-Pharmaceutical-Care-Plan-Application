@@ -20,7 +20,7 @@ from .forms import (
     RegistrationForm,
     MedicalNoteForm,
     PrescriptionForm,
-    DateAddForm,
+
 )
 from .models import (
     Patients,
@@ -30,7 +30,7 @@ from .models import (
     Slider,
     MedicalNote,
     Prescription,
-    DateAdd,
+
 )
 from django.contrib import messages
 
@@ -56,7 +56,6 @@ class AddPatientsView(SuccessMessageMixin, CreateView):
     model = Patients
     success_url = reverse_lazy("first-page")
     form_class = PatientsForm
-    success_message = "Dodano pacjenta!"
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -119,9 +118,6 @@ class AddDoctorsView(CreateView):
     success_url = reverse_lazy("first-page")
     form_class = DoctorsForm
 
-    def __init__(self, **kwargs):
-        super().__init__(kwargs)
-        self.success_message = None
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -421,22 +417,24 @@ class PrescriptionCreateView(CreateView):
         return reverse("patient-details", kwargs={"pk": self.kwargs["patient_id"]})
 
 
-class DateAddCreateView(CreateView):
-    """View DataAdd - data vist patient"""
+# class DateAddCreateView(CreateView):
+#     """View DataAdd - data vist patient"""
+#
+#     model = DateAdd
+#     form_class = DateAddForm
+#     template_name = "date_add_form.html"
+#
+#     def form_valid(self, form):
+#         patient_id = self.kwargs["patient_id"]
+#         patient = get_object_or_404(Patients, id=patient_id)
+#         form.instance.patients = patient
+#         return super().form_valid(form)
+#
+#     def get_success_url(self):
+#         patient_id = self.kwargs["patient_id"]
+#         return reverse("patient-details", kwargs={"pk": patient_id})
 
-    model = DateAdd
-    form_class = DateAddForm
-    template_name = "date_add_form.html"
 
-    def form_valid(self, form):
-        patient_id = self.kwargs["patient_id"]
-        patient = get_object_or_404(Patients, id=patient_id)
-        form.instance.patients = patient
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        patient_id = self.kwargs["patient_id"]
-        return reverse("patient-details", kwargs={"pk": patient_id})
 
 
 class DetailForPatientsListView(DetailView):
@@ -457,3 +455,4 @@ class DetailForDoctorsListView(DetailView):
     context_object_name = "patient"
     slug_field = "id"
     slug_url_kwarg = "id"
+

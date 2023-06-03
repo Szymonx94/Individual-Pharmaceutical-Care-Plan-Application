@@ -8,7 +8,7 @@ from .models import (
     MedicalComponent,
     MedicalNote,
     Prescription,
-    DateAdd,
+
 )
 
 from django import forms
@@ -146,14 +146,3 @@ class PrescriptionForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
         }
 
-
-class DateAddForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(DateAddForm, self).__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs["class"] = "form-control"
-        self.fields["data_add"].widget.attrs["placeholder"] = "Rok-miesiąc-dzień"
-
-    class Meta:
-        model = DateAdd
-        fields = ["data_add"]

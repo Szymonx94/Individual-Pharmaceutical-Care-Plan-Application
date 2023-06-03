@@ -82,17 +82,6 @@
     </ul>
 
 
-    <h4>Daty odbytych wizyt</h4>
-    <ul>
-        {% for date in object.date_add.all %}
-            <li>
-                <p>{{ date.data_add }}</p>
-                <p></p>
-            </li>
-        {% empty %}
-            <li>Brak wizyt</li>
-        {% endfor %}
-    </ul>
 
 
 

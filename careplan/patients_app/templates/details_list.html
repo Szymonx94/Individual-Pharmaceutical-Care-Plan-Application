@@ -16,8 +16,6 @@
         }
     </style>
 
-    <div class="container">
-
         <h2>Szczegóły:</h2>
 
 
@@ -51,7 +49,6 @@
 
             </tbody>
         </table>
-
         <ul class="nav-item dropdown">
             <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown"
                aria-expanded="false">
@@ -65,7 +62,6 @@
                 </li>
                 <li><a class="dropdown-item" href="/add_prescription/{{ patient.id }}/">Dodaj notatkę dla lekarza</a>
                 </li>
-                <li><a class="dropdown-item" href="/date_add/{{ patient.id }}/">Dodaj datę wizyty</a></li>
                 <li><a class="dropdown-item" href="https://ktomalek.pl/#0/" target="_blank">Sprawdź dostępność leków</a>
                 </li>
 
@@ -75,6 +71,7 @@
             </ul>
         </ul>
 
+        <body>
         <h3>Opis chorób:</h3>
         <ul>
             {{ object.description_of_diseases }}
@@ -132,21 +129,10 @@
             {% endfor %}
         </ul>
 
-        <h3>Daty odbytych wizyt</h3>
-        <ul>
-            {% for date in object.date_add.all %}
-                <li>
-                    <p>{{ date.data_add }}</p>
-                    <p></p>
-                </li>
-            {% empty %}
-                <li>Brak wizyt</li>
-            {% endfor %}
-        </ul>
 
 
         </body>
-        </html>
+
 
     </div>
 

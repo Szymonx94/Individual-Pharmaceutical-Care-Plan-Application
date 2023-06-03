@@ -12,7 +12,7 @@ from .models import (
     MedicalComponent,
     MedicalNote,
     Prescription,
-    DateAdd,
+
 )
 from .forms import PatientsForm, RegistrationForm
 import pytest
@@ -402,20 +402,6 @@ def test_prescription_create_view_post(client):
     assert medical_note.description == data["description"]
 
 
-@pytest.mark.django_db
-def test_date_add_create_view_post(client):
-    patient = Patients.objects.create(first_name="Kamil")
-    data = {
-        "data_add": "2023-05-31",
-    }
-    url = reverse("date-add", kwargs={"patient_id": patient.id})
-
-    response = client.post(url, data=data)
-    assert response.status_code == 302
-
-    date_add = DateAdd.objects.last()
-    assert date_add.patients == patient
-    assert date_add.data_add.strftime("%Y-%m-%d") == data["data_add"]
 
 
 @pytest.mark.django_db

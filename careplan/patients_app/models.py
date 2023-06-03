@@ -59,18 +59,11 @@ class MedicalComponent(models.Model):
     patients = models.ManyToManyField(Patients, related_name="medical_component")
 
 
-class DateAdd(models.Model):
-    """
-    Model for adding dates of visits
-    """
-
-    data_add = models.DateTimeField(null=True)
-    patients = models.ForeignKey(
-        Patients, on_delete=models.PROTECT, null=True, related_name="date_add"
-    )
-
-
 class Slider(models.Model):
+    """
+        Model for view slider in first site
+    """
+
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(max_length=800, blank=False)
     image = models.ImageField(upload_to="static/", blank=False)
@@ -80,6 +73,10 @@ class Slider(models.Model):
 
 
 class MedicalNote(models.Model):
+    """
+    Model medical note for doctor
+    """
+
     patient = models.ForeignKey(
         Patients, on_delete=models.CASCADE, related_name="medical_notes"
     )
@@ -88,6 +85,10 @@ class MedicalNote(models.Model):
 
 
 class Prescription(models.Model):
+    """
+        Model medical note for patient
+    """
+
     patient = models.ForeignKey(
         Patients, on_delete=models.CASCADE, related_name="prescriptions"
     )

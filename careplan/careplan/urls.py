@@ -40,10 +40,10 @@ from patients_app.views import (
     AddMedicalComponentForPatientView,
     PrescriptionCreateView,
     MedicalNoteCreateView,
-    DateAddCreateView,
     DetailForPatientsListView,
     DetailForDoctorsListView,
-    DoctorsDeleteView, MedicamentDeleteView,
+    DoctorsDeleteView,
+    MedicamentDeleteView
 )
 
 urlpatterns = [
@@ -97,7 +97,6 @@ urlpatterns = [
         PrescriptionCreateView.as_view(),
         name="add-prescription",
     ),
-    path("date_add/<int:patient_id>/", DateAddCreateView.as_view(), name="date-add"),
     path(
         "details_list_for_patients/<int:pk>/",
         DetailForPatientsListView.as_view(),
