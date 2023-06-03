@@ -1,6 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from django.views import View
@@ -95,12 +94,14 @@ class PatientsUpdateView(UpdateView):
     model = Patients
     form_class = PatientsForm
     template_name = "patients_update.html"
-    success_url = "/patients_list/"
+    success_url = reverse_lazy("patients-list")
 
     def form_valid(self, form):
-        instance = form.save(commit=False)
-        instance.save()
-        return HttpResponseRedirect(self.get_success_url())
+        patient = form.instance
+        patient.first_name = form.cleaned_data["first_name"]
+        patient.last_name = form.cleaned_data["last_name"]
+        patient.save()
+        return super().form_valid(form)
 
 
 class PatientsDeleteView(DeleteView):
@@ -118,9 +119,9 @@ class AddDoctorsView(CreateView):
     success_url = reverse_lazy("first-page")
     form_class = DoctorsForm
 
-    # def __init__(self, **kwargs):
-    #     super().__init__(kwargs)
-    #     self.success_message = None
+    def __init__(self, **kwargs):
+        super().__init__(kwargs)
+        self.success_message = None
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -135,7 +136,7 @@ class DoctorsListView(ListView):
 
     model = Doctors
     template_name = "doctors_list.html"  # Name template HTML
-    context_object_name = "doctors"  # Nazwa obiektu w kontekście szablonu
+    context_object_name = "doctors"
 
     def get_queryset(self):
         query = self.request.GET.get("search")
@@ -150,12 +151,14 @@ class DoctorsListView(ListView):
         context["search_query"] = self.request.GET.get("search", "")
         return context
 
+
 class DoctorsDeleteView(DeleteView):
     """Delete doctor"""
 
     model = Doctors
     template_name = "doctors_delete.html"
     success_url = reverse_lazy("doctors-list")
+
 
 class AddMedicamentView(SuccessMessageMixin, CreateView):
     """Added to the medicament database"""
@@ -177,12 +180,12 @@ class MedicamentListView(ListView):
 
     model = Medicament
     template_name = "medicament_list.html"  # Name template HTML
-    context_object_name = "medicament"  # Nazwa obiektu w kontekście szablonu
+    context_object_name = "medicament"
 
     def get_queryset(self):
         query = self.request.GET.get("search")
         if query:
-            # Przeszukiwanie doctora po nazwisku
+            # Searching a doctor by name
             return Medicament.objects.filter(name__icontains=query)
         else:
             return Medicament.objects.all()
@@ -192,12 +195,14 @@ class MedicamentListView(ListView):
         context["search_query"] = self.request.GET.get("search", "")
         return context
 
+
 class MedicamentDeleteView(DeleteView):
     """Delete medicament"""
 
     model = Medicament
     template_name = "medicament_delete.html"
     success_url = reverse_lazy("medicament-list")
+
 
 class AddMedicalComponentView(SuccessMessageMixin, CreateView):
     """Added to the medicalcomponent database"""
@@ -219,12 +224,11 @@ class MedicalcomponentListView(ListView):
 
     model = MedicalComponent
     template_name = "medicalcomponent_list.html"  # Name template HTML
-    context_object_name = "medicalcomponent"  # Nazwa obiektu w kontekście szablonu
+    context_object_name = "medicalcomponent"
 
     def get_queryset(self):
         query = self.request.GET.get("search")
         if query:
-            # Przeszukiwanie doctora po nazwisku
             return MedicalComponent.objects.filter(name__icontains=query)
         else:
             return MedicalComponent.objects.all()
@@ -245,7 +249,7 @@ class DoctorPrintOutListView(ListView):
     def get_queryset(self):
         query = self.request.GET.get("search")
         if query:
-            # Przeszukiwanie pacjentów po nazwisku
+            # Searching patients by name
             return Patients.objects.filter(pesel__icontains=query).order_by("id")
         else:
             return Patients.objects.all().order_by("id")
@@ -260,13 +264,12 @@ class PatientPrintOutListView(ListView):
     """Views for patients printout"""
 
     model = Patients
-    template_name = "doctor_printout.html"  # Name template HTML
-    context_object_name = "patients"  # Nazwa obiektu w kontekście szablonu
+    template_name = "patient_printout.html"  # Name template HTML
+    context_object_name = "patients"
 
     def get_queryset(self):
         query = self.request.GET.get("search")
         if query:
-            # Przeszukiwanie pacjentów po nazwisku
             return Patients.objects.filter(pesel__icontains=query).order_by("id")
         else:
             return Patients.objects.all().order_by("id")
@@ -376,7 +379,7 @@ class AddMedicalComponentForPatientView(View):
             )
             medical_component.patients.add(
                 patient
-            )  # Dodajemy pacjenta do pola ManyToManyField
+            )  # We add the patient to the ManyToManyField
 
         # patient = get_object_or_404(Patients, id=patient_id)
 

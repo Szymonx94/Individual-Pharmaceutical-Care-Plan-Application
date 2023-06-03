@@ -2,8 +2,8 @@
 {% block content %}
     <h3>Dodaj wyrób medyczny:</h3>
     <form action="{% url 'add-medicalcomponent' %}" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="Submit">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="Submit">
     </form>
 {% endblock %}

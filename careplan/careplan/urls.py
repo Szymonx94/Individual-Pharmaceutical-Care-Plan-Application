@@ -59,7 +59,7 @@ urlpatterns = [
     path("add_medicament/", AddMedicamentView.as_view(), name="add-medicament"),
     path("medicament_list/", MedicamentListView.as_view(), name="medicament-list"),
     path("add_medicalcomponent/", AddMedicalComponentView.as_view(), name="add-medicalcomponent"),
-    path("medicament/delete/<int:pk>/", MedicamentDeleteView.as_view(), name="doctor-delete"),
+    path("medicament/delete/<int:pk>/", MedicamentDeleteView.as_view(), name="medicament-delete"),
     path(
         "medicalcomponent_list/",
         MedicalcomponentListView.as_view(),

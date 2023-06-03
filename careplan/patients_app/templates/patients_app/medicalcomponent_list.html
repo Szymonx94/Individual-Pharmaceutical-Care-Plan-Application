@@ -1,33 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Lista wyrobów:</h2>
-<br><br>
+    <h2>Lista wyrobów medycznych:</h2>
+    <br><br>
 
-<form method="GET" action="{% url 'medicalcomponent-list' %}">
-    <input type="text" name="search" value="{{ search_query }}" placeholder="Wyszukaj po nazwie">
-    <button type="submit">Szukaj</button>
-</form>
-<br><br>
+    <form method="GET" action="{% url 'medicalcomponent-list' %}">
+        <input type="text" name="search" value="{{ search_query }}" placeholder="Wyszukaj po nazwie">
+        <button type="submit">Szukaj</button>
+    </form>
+    <br><br>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Nazwa</th>
-        <th>Zastosowanie</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for medicalcomponent in object_list %}
-    <tr>
-        <td>{{ medicalcomponent.name }}</td>
-        <td>{{ medicalcomponent.description }}</td>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Zastosowanie</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for medicalcomponent in object_list %}
+            <tr>
+                <td>{{ medicalcomponent.name }}</td>
+                <td>{{ medicalcomponent.description }}</td>
 
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="5">Brak wyrobu</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">Brak wyrobu</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

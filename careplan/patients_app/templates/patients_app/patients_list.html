@@ -1,43 +1,43 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Lista pacjentów:</h2>
-<br><br>
+    <h2>Lista pacjentów:</h2>
+    <br><br>
 
-<form method="GET" action="{% url 'patients-list' %}">
-    <input type="text" name="search" value="{{ search_query }}" placeholder="Wyszukaj po nr Pesel">
-    <button type="submit">Szukaj</button>
-</form>
-<br><br>
+    <form method="GET" action="{% url 'patients-list' %}">
+        <input type="text" name="search" value="{{ search_query }}" placeholder="Wyszukaj po nr Pesel">
+        <button type="submit">Szukaj</button>
+    </form>
+    <br><br>
 
-<table class="table">
+    <table class="table">
 
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Imię</th>
-        <th>Nazwisko</th>
-        <th>Adres zamieszkania</th>
-        <th>PESEL</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for patient in object_list %}
-    <tr>
-        <td><a href="/patient_details/{{ patient.id }}/">{{ patient.id }}</a></td>
-        <td>{{ patient.first_name }}</td>
-        <td>{{ patient.last_name }}</td>
-        <td>{{ patient.address }}</td>
-        <td>{{ patient.pesel }} </td>
-        <td>
-            <a href="/patients/edit/{{ patient.id }}/">Edytuj</a> |
-            <a href="/patients/delete/{{ patient.id }}/">Usuń</a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="5">Brak pacjenta</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Adres zamieszkania</th>
+            <th>PESEL</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for patient in object_list %}
+            <tr>
+                <td><a href="/patient_details/{{ patient.id }}/">{{ patient.id }}</a></td>
+                <td>{{ patient.first_name }}</td>
+                <td>{{ patient.last_name }}</td>
+                <td>{{ patient.address }}</td>
+                <td>{{ patient.pesel }} </td>
+                <td>
+                    <a href="/patients/edit/{{ patient.id }}/">Edytuj</a> |
+                    <a href="/patients/delete/{{ patient.id }}/">Usuń</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">Brak pacjenta</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 
-</head>
-<body>
+    </head>
+    <body>
     <div class="container">
         <h1>Add Medication</h1>
 
@@ -15,7 +15,8 @@
                 <label for="medication">Medication</label>
                 <select name="medication" multiple class="form-control">
                     {% for medication in medications %}
-                        <option value="{{ medication.id }}">{{ medication.name }} --> {{ medication.descriptions }}</option>
+                        <option value="{{ medication.id }}">{{ medication.name }}
+                            --> {{ medication.descriptions }}</option>
                     {% endfor %}
                 </select>
                 <div class="invalid-feedback">Please select at least one medication.</div>
@@ -26,8 +27,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-</body>
-
-
+    </body>
 
 {% endblock %}

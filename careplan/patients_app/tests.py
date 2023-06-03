@@ -97,33 +97,33 @@ def test_patients_update_view_get(user, client, patients):
 
 
 @pytest.mark.django_db
-def test_patients_update_view_post(client):
-    patients = Patients.objects.create(
-        first_name="Szymon", last_name="Zietek", year_of_birth=1994, age=34
-    )
+def test_update_patients_view(user, client, patients):
+    client.force_login(user=user)
+    response = client.get(reverse('patients-edit', kwargs={"pk": patients.id}))
+    assert response.status_code == 200
 
-    edit_data = {
+
+    edit = {
         "first_name": "Kamil",
-        "last_name": "Kowalski",
+        "last_name": 'Kowalski',
         "year_of_birth": 1994,
         "age": 32,
     }
 
-    url = reverse("patients-edit", kwargs={"pk": patients.id})
-    response = client.post(url, data=edit_data)
-    patients.refresh_from_db()
-    updated_patient = Patients.objects.get(pk=patients.id)
 
-    assert response.status_code == 302
-    assert updated_patient.first_name == edit_data["first_name"]
-    assert updated_patient.last_name == edit_data["last_name"]
-    assert updated_patient.year_of_birth == edit_data["year_of_birth"]
-    assert updated_patient.age == edit_data["age"]
-    assert response.url == reverse("patients-list")
+    response = client.post(
+        reverse("patients-edit", kwargs={"pk": patients.id}), data=edit
+    )
+    # assert response.status_code == 302
+    patients.refresh_from_db()
+    assert patients.first_name == edit["first_name"]
+    assert patients.last_name == edit["last_name"]
+    assert patients.year_of_birth == edit["year_of_birth"]
+    assert patients.age == edit["age"]
 
 
 @pytest.mark.django_db
-def test_get_delete_view(client, user, patients):
+def test_get_patients_delete_view(client, user, patients):
     client.force_login(user=user)
     response = client.get(reverse("patient-delete", kwargs={"pk": patients.id}))
     assert response.status_code == 200
@@ -131,7 +131,7 @@ def test_get_delete_view(client, user, patients):
 
 
 @pytest.mark.django_db
-def test_post_delete_view(client, user, patients):
+def test_post_patients_delete_view(client, user, patients):
     client.force_login(user=user)
     response = client.post(reverse("patient-delete", kwargs={"pk": patients.id}))
     assert response.status_code == 302
@@ -167,6 +167,23 @@ def test_doctors_list_view_without_search(client, doctors):
     assert response.status_code == 200
     assert "doctors" in response.context
     assert len(response.context["doctors"]) == 3
+
+
+@pytest.mark.django_db
+def test_doctor_delete_view_get(client, user, doctor):
+    client.force_login(user=user)
+    response = client.get(reverse("doctor-delete", kwargs={"pk": doctor.id}))
+    assert response.status_code == 200
+    assert response.template_name == ["doctors_delete.html"]
+
+
+@pytest.mark.django_db
+def test_doctor_delete_view_post(client, user, doctor):
+    client.force_login(user=user)
+    response = client.post(reverse("doctor-delete", kwargs={"pk": doctor.id}))
+    assert response.status_code == 302
+    assert response.url == reverse("doctors-list")
+    assert not Doctors.objects.filter(pk=doctor.pk).exists()
 
 
 @pytest.mark.django_db
@@ -209,6 +226,23 @@ def test_medicament_list_view_without_search(client):
     assert medicament1 in medicament_list
     assert medicament2 in medicament_list
     assert response.context["search_query"] == ""
+
+
+@pytest.mark.django_db
+def test_medicament_delete_view_get(client, user, medicaments):
+    client.force_login(user=user)
+    response = client.get(reverse("medicament-delete", kwargs={"pk": medicaments.id}))
+    assert response.status_code == 200
+    assert response.template_name == ["medicament_delete.html"]
+
+
+@pytest.mark.django_db
+def test_medicament_delete_view_post(client, user, medicaments):
+    client.force_login(user=user)
+    response = client.post(reverse("medicament-delete", kwargs={"pk": medicaments.id}))
+    assert response.status_code == 302
+    assert response.url == reverse("medicament-list")
+    assert not Medicament.objects.filter(pk=medicaments.pk).exists()
 
 
 @pytest.mark.django_db

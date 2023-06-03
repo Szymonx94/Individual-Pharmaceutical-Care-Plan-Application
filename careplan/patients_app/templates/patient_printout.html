@@ -1,39 +1,41 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Szczegółowy opis:</h2>
-<br><br>
+    <h2>Szczegółowy opis:</h2>
+    <br><br>
 
-<form method="GET" action="{% url 'patient-printout' %}">
-    <input type="text" name="search" value="{{ search_query }}" placeholder="Wyszukaj po nr Pesel">
-    <button type="submit">Szukaj</button>
-</form>
+    <form method="GET" action="{% url 'patient-printout' %}">
+        <label>
+            <input type="text" name="search" value="{{ search_query }}" placeholder="Wyszukaj po nr Pesel">
+        </label>
+        <button type="submit">Szukaj</button>
+    </form>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Imię</th>
-        <th>Nazwisko</th>
-        <th>Adres zamieszkania</th>
-        <th>PESEL</th>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Adres zamieszkania</th>
+            <th>PESEL</th>
 
-    </tr>
-    </thead>
-    <tbody>
-    {% for patients in object_list %}
-    <tr>
-        <td><a href="/details_list_for_patients/{{ patient.id }}/">{{ patients.id }}</a></td>
-        <td>{{ patients.first_name }}</td>
-        <td>{{ patients.last_name }}</td>
-        <td>{{ patients.address }}</td>
-        <td>{{ patients.pesel }}</td>
-    </tr>
+        </tr>
+        </thead>
+        <tbody>
+        {% for patients in object_list %}
+            <tr>
+                <td><a href="/details_list_for_patients/{{ patients.id }}/">{{ patients.id }}</a></td>
+                <td>{{ patients.first_name }}</td>
+                <td>{{ patients.last_name }}</td>
+                <td>{{ patients.address }}</td>
+                <td>{{ patients.pesel }}</td>
+            </tr>
 
-    {% empty %}
-    <tr>
-        <td colspan="5">Brak pacjenta</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        {% empty %}
+            <tr>
+                <td colspan="5">Brak pacjenta</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

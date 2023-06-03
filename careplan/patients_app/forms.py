@@ -33,7 +33,7 @@ class PatientsForm(forms.ModelForm):
             "weight",
             "growth",
             "description_of_diseases",
-            "drugs_list",
+            "drugs_list"
         ]
         labels = {
             "first_name": "Imię",
@@ -46,7 +46,7 @@ class PatientsForm(forms.ModelForm):
             "weight": "Waga",
             "growth": "Wzrost",
             "description_of_diseases": "Opis chorób",
-            "drugs_list": "Lista leków",
+            "drugs_list": "Lista leków"
         }
 
 

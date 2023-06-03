@@ -3,102 +3,96 @@
 
 
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Imię</th>
-        <th>Nazwisko</th>
-        <th>Rok urodzenia</th>
-        <th>Wiek</th>
-        <th>Płeć</th>
-        <th>Wzrost</th>
-        <th>Waga</th>
-        <th>Adres zamieszkania</th>
-        <th>PESEL</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>{{ patient.first_name }}</td>
-        <td>{{ patient.last_name }}</td>
-        <td>{{ patient.year_of_birth }}</td>
-        <td>{{ patient.age }}</td>
-        <td>{{ patient.gender }}</td>
-        <td>{{ patient.growth }}</td>
-        <td>{{ patient.weight }}</td>
-        <td>{{ patient.address }}</td>
-        <td>{{ patient.pesel }}</td>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Rok</th>
+            <th>Wiek</th>
+            <th>Płeć</th>
+            <th>Wzrost</th>
+            <th>Waga</th>
+            <th>Adres zam.</th>
+            <th>PESEL</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ patient.first_name }}</td>
+            <td>{{ patient.last_name }}</td>
+            <td>{{ patient.year_of_birth }}</td>
+            <td>{{ patient.age }}</td>
+            <td>{{ patient.gender }}</td>
+            <td>{{ patient.growth }}</td>
+            <td>{{ patient.weight }}</td>
+            <td>{{ patient.address }}</td>
+            <td>{{ patient.pesel }}</td>
 
-    </tr>
+        </tr>
 
-    </tbody>
-</table>
-
-
-
-<h3>Opis chorób:</h3>
-<ul>
-    {{object.description_of_diseases}}
-    {{ description }}
-
-</ul>
-
-<h3>Lista aktualnie przyjmowanych leków:</h3>
-<ul>
-    {{object.drugs_list }}
-    {{ drug }}
-
-</ul>
-
-<h2>Nowa lista leków</h2>
-<ul>
-    {% for medication in object.medicament.all %}
-    <li>{{ medication.name }} --> {{ medication.descriptions }}</li>
-    {% endfor %}
-</ul>
-
-<h2>Wyroby medyczne</h2>
-<ul>
-    {% for medical_components in object.medical_component.all %}
-    <li>
-        <strong>Nazwa:</strong> {{ medical_components.name }}<br>
-        <strong>Opis:</strong> {{ medical_components.description }}
-    </li>
-    {% empty %}
-    <li>Brak</li>
-    {% endfor %}
-</ul>
-
-<h4>Notatka dla lekarza</h4>
-<ul>
-    {% for notes in object.prescriptions.all %}
-        <li>
-            <p>Treść: {{ notes.description }}</p>
-            <p>Data utworzenia: {{ notes.created_at }}</p>
-        </li>
-    {% empty %}
-        <li>Brak notatek medycznych</li>
-    {% endfor %}
-</ul>
-
-
-<h4>Daty odbytych wizyt</h4>
-<ul>
-    {% for date in object.date_add.all %}
-        <li>
-            <p>{{ date.data_add }}</p>
-            <p></p>
-        </li>
-    {% empty %}
-        <li>Brak wizyt</li>
-    {% endfor %}
-</ul>
+        </tbody>
+    </table>
 
 
 
-</body>
-</html>
+    <h3>Opis chorób:</h3>
+    <ul>
+        {{ object.description_of_diseases }}
+        {{ description }}
 
+    </ul>
+
+    <h3>Lista aktualnie przyjmowanych leków:</h3>
+    <ul>
+        {{ object.drugs_list }}
+        {{ drug }}
+
+    </ul>
+
+    <h2>Nowa lista leków</h2>
+    <ul>
+        {% for medication in object.medicament.all %}
+            <li>{{ medication.name }} --> {{ medication.descriptions }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Wyroby medyczne</h2>
+    <ul>
+        {% for medical_components in object.medical_component.all %}
+            <li>
+                <strong>Nazwa:</strong> {{ medical_components.name }}<br>
+                <strong>Opis:</strong> {{ medical_components.description }}
+            </li>
+        {% empty %}
+            <li>Brak</li>
+        {% endfor %}
+    </ul>
+
+    <h4>Notatka dla lekarza</h4>
+    <ul>
+        {% for notes in object.prescriptions.all %}
+            <li>
+                <p>Treść: {{ notes.description }}</p>
+                <p>Data utworzenia: {{ notes.created_at }}</p>
+            </li>
+        {% empty %}
+            <li>Brak notatek medycznych</li>
+        {% endfor %}
+    </ul>
+
+
+    <h4>Daty odbytych wizyt</h4>
+    <ul>
+        {% for date in object.date_add.all %}
+            <li>
+                <p>{{ date.data_add }}</p>
+                <p></p>
+            </li>
+        {% empty %}
+            <li>Brak wizyt</li>
+        {% endfor %}
+    </ul>
 
 
 
