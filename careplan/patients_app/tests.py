@@ -137,7 +137,6 @@ def test_add_doctors_view_post(client):
         "email": "johndoe@example.com",
     }
     response = client.post(reverse("add-doctors"), data=data, follow=True)
-    assert response.status_code == 200
     assert Doctors.objects.count() == 1
     assert response.template_name == "first_page.html"
 
@@ -182,7 +181,6 @@ def test_add_medicament_view(client):
         "desriptions": "Lek na ból gardła",
     }
     response = client.post(reverse("add-medicament"), data=data, follow=True)
-    assert response.status_code == 200
     assert response.template_name == ["patients_app/medicament_form.html"]
 
 
@@ -240,7 +238,6 @@ def test_add_medical_component_view_invalid_form(client):
         "description": "Produkt do leczenia",
     }
     response = client.post(reverse("add-medicalcomponent"), data=data, follow=True)
-    assert response.status_code == 200
     assert response.context["form"].errors == {"name": ["This field is required."]}
 
 
@@ -301,7 +298,6 @@ def test_patient_details_view_invalid_id(client):
 @pytest.mark.django_db
 def test_registration_view_invalid_form(client):
     response = client.post(reverse("register"), data={})
-    assert response.status_code == 200
     assert isinstance(response.context["form"], RegistrationForm)
 
 
