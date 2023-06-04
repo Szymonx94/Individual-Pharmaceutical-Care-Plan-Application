@@ -4,6 +4,6 @@
     <form action="{% url 'add-medicament' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="Submit">
+        <input type="Submit" value="Wyślij">
     </form>
 {% endblock %}

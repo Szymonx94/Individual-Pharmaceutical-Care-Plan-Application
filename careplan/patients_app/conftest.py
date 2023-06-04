@@ -16,6 +16,11 @@ def client():
     new = Client()
     return new
 
+@pytest.fixture
+def user():
+    new = User.objects.create_user(username='Szymon', password='12344')
+    return new
+
 
 @pytest.fixture
 def patients():
@@ -26,7 +31,7 @@ def patients():
         age="34",
         pesel="15131612145",
         address="Warszawa",
-        gender="Mężczyzna",
+        gender="K",
         weight="100",
         growth="178",
         description_of_diseases="Opis chorób",

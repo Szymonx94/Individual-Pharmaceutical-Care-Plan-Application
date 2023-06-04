@@ -57,7 +57,7 @@ def test_add_patients_view_form_validation(client):
     }
     response = client.post(reverse("add-patients"), data=data, follow=True)
     assert response.redirect_chain == []
-    assert "field is required" in response.content.decode()
+    assert "To pole jest wymagane" in response.content.decode()
     assert Patients.objects.count() == 0
 
 
@@ -109,6 +109,35 @@ def test_patients_update_view_invalid_form(client):
     assert response.status_code == 200
     assert "patients_update.html" in [t.name for t in response.templates]
     assert response.context["form"].errors
+
+@pytest.mark.django_db
+def test_patients_update_view_post(client, user):
+    patients = Patients.objects.create(first_name='Szymon', last_name='Zietek', year_of_birth=1994, age=34)
+
+    edit_data = {
+        # "first_name": "Kamil",
+        "last_name": "Kowalski",
+        "year_of_birth": 1994,
+        "pesel": 15131612145,
+        "address": "Warszawa",
+        "age": 32,
+        "gender": "M",
+        "weight": 100,
+        "growth": 178,
+        "description_of_diseases": "Opis chorób",
+        "drugs_list": "Lista leków",
+    }
+    client.force_login(user=user)
+    url = reverse('patients-edit', kwargs={'pk': patients.pk})
+    response = client.post(url, data=edit_data)
+    # print(response.context["form"].errors)
+    updated_patient = Patients.objects.get(pk=patients.pk)
+    # assert updated_patient.first_name == edit_data["first_name"]
+    assert updated_patient.last_name == edit_data["last_name"]
+    assert updated_patient.year_of_birth == edit_data["year_of_birth"]
+    assert updated_patient.age == edit_data["age"]
+    assert response.status_code == 302
+    assert response.url == reverse('patients-list')
 
 
 @pytest.mark.django_db
@@ -238,7 +267,7 @@ def test_add_medical_component_view_invalid_form(client):
         "description": "Produkt do leczenia",
     }
     response = client.post(reverse("add-medicalcomponent"), data=data, follow=True)
-    assert response.context["form"].errors == {"name": ["This field is required."]}
+    assert response.context["form"].errors == {"name": ["To pole jest wymagane."]}
 
 
 @pytest.mark.django_db
