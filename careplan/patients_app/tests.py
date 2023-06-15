@@ -70,6 +70,7 @@ def test_add_patients_view_get(client):
     form = response.context["form"]
     assert isinstance(form, PatientsForm)
 
+
 @pytest.mark.django_db
 def test_patients_list_view(client, patients):
     response = client.get(reverse("patients-list"))
@@ -109,6 +110,7 @@ def test_patients_update_view_invalid_form(client):
     assert response.status_code == 200
     assert "patients_update.html" in [t.name for t in response.templates]
     assert response.context["form"].errors
+
 
 @pytest.mark.django_db
 def test_patients_update_view_post(client, user):
@@ -411,8 +413,6 @@ def test_prescription_create_view_post(client):
     medical_note = Prescription.objects.last()
     assert medical_note.patient == patient
     assert medical_note.description == data["description"]
-
-
 
 
 @pytest.mark.django_db
